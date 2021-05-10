@@ -48,6 +48,10 @@
 
 package leetcode.editor.cn;
 
+import java.time.temporal.Temporal;
+import java.util.LinkedList;
+import java.util.Queue;
+
 //Java：判断二分图
 public class P785IsGraphBipartite {
     public static void main(String[] args) {
@@ -57,47 +61,32 @@ public class P785IsGraphBipartite {
     }
 
     //leetcode submit region begin(Prohibit modification and deletion)
-    class UnionFind {
-        private int[] parent;
-
-        public UnionFind(int n) {
-            parent = new int[n];
-            for (int i = 0; i < n; i++) {
-                parent[i] = i;
-            }
-        }
-
-        public int find(int p) {
-            if (p != parent[p]) {
-                parent[p] = find(parent[p]);
-            }
-            return parent[p];
-        }
-
-        public void union(int p, int q) {
-            int rootP = find(p);
-            int rootQ = find(q);
-            if (rootP != rootQ) {
-                parent[rootP] = rootQ;
-            }
-        }
-
-        public boolean isConnect(int p, int q) {
-            return find(p) == find(q);
-        }
-    }
-
     class Solution {
         public boolean isBipartite(int[][] graph) {
+            // 可以用染色理论，就是说先尝试染色，将相邻的染成另外一种染色，如果已经染过色，并且颜色不正确的话，就是错误的
             int n = graph.length;
-            UnionFind uf = new UnionFind(n);
+            // colors表示颜色，0表示没染过色，1表示一种颜色，-1表示另外一种颜色
+            int[] colors = new int[n];
+            // 有可能有多个连通域
+            Queue<Integer> queue = new LinkedList<>();
             for (int i = 0; i < n; i++) {
-                for (int nei : graph[i]) {
-                    if (uf.isConnect(i, nei)) {
-                        return false;
+                if (colors[i] != 0) {
+                    continue;
+                }
+                colors[i] = 1;
+                queue.offer(i);
+                while (!queue.isEmpty()) {
+                    int cur = queue.poll();
+                    for (int adj : graph[cur]) {
+                        if (colors[adj] == colors[cur]) {
+                            // 邻居已经被染成同一种颜色了，出现错误
+                            return false;
+                        } else if (colors[adj] == 0) {
+                            // 邻居还没染颜色，染成反色
+                            colors[adj] = -colors[cur];
+                            queue.offer(adj);
+                        }
                     }
-                    // 将i的邻居全部加到一个组里面
-                    uf.union(graph[i][0], nei);
                 }
             }
             return true;
