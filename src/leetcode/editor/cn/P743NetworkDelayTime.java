@@ -50,6 +50,8 @@
 package leetcode.editor.cn;
 
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
 
 //Java：网络延迟时间
 public class P743NetworkDelayTime {
@@ -85,7 +87,31 @@ public class P743NetworkDelayTime {
             Arrays.fill(distToK, Integer.MAX_VALUE);
             // k到自己的距离是0
             distToK[k] = 0;
-            return 0;
+            // 队列中放即将访问的节点，代替了传统算法中的S(已经访问过的最短路径中的节点)和U(未访问的节点)
+            Queue<Integer> queue = new LinkedList<>();
+            // 从k开始访问
+            queue.offer(k);
+            while (!queue.isEmpty()) {
+                // 这个cur是中间节点
+                int cur = queue.poll();
+                for (int i = 1; i <= n; i++) {
+                    // 从未访问的节点中，找出是否能借用cur作为跳台更短的路径，更新distToK数组
+                    if (graph[cur][i] != Integer.MAX_VALUE && distToK[cur] + graph[cur][i] < distToK[i]) {
+                        distToK[i] = distToK[cur] + graph[cur][i];
+                        // i加入到已经访问过的最短路径中的节点中去
+                        queue.offer(i);
+                    }
+                }
+            }
+            // 返回结果
+            int res = -1;
+            for (int i = 1; i <= n; i++) {
+                if (distToK[i] == Integer.MAX_VALUE) {
+                    return -1;
+                }
+                res = Math.max(res, distToK[i]);
+            }
+            return res;
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)
