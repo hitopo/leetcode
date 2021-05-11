@@ -41,24 +41,24 @@ public class P215KthLargestElementInAnArray {
             int target = len - k;
             while (true) {
                 // index表示的是快速排序一次的完成的那个下标元素
-                int index = partition(nums, left, right);
-                if (index < target) {
-                    left = index + 1;
-                } else if (index > target) {
-                    right = index - 1;
+                int sortedIdx = partition(nums, left, right);
+                if (sortedIdx < target) {
+                    left = sortedIdx + 1;
+                } else if (sortedIdx > target) {
+                    right = sortedIdx - 1;
                 } else {
-                    return nums[index];
+                    return nums[sortedIdx];
                 }
             }
         }
 
         private int partition(int[] nums, int left, int right) {
-            // 随机选择一个元素作为轴
-            if (left > right) {
-                int randomIdx = left + random.nextInt(right - left + 1);
-                // 选择过轴之后要把轴元素交换到最左边
-                swap(nums, left, randomIdx);
-            }
+            // // 随机选择一个元素作为轴
+            // if (left > right) {
+            //     int randomIdx = left + random.nextInt(right - left + 1);
+            //     // 选择过轴之后要把轴元素交换到最左边
+            //     swap(nums, left, randomIdx);
+            // }
             int pivot = nums[left];
             int l = left;
             int r = right;
@@ -79,6 +79,7 @@ public class P215KthLargestElementInAnArray {
                 }
             }
             nums[l] = pivot;
+            // 最终排序好的元素是位置l的元素
             return l;
         }
 
