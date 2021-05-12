@@ -58,9 +58,9 @@ package leetcode.editor.cn;
 import structure.TreeNode;
 import utils.TreeNodeUtil;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.LinkedList;
 import java.util.List;
 
 //Java：二叉树的中序遍历
@@ -90,13 +90,13 @@ public class P94BinaryTreeInorderTraversal {
     class Solution {
         public List<Integer> inorderTraversal(TreeNode root) {
             // 中序遍历
-            Deque<TreeNode> stack = new ArrayDeque<>();
+            Deque<TreeNode> stack = new LinkedList<>();
             List<Integer> list = new ArrayList<>();
             if (root == null) {
                 return list;
             }
             TreeNode cur = root;
-            // cur指向右子树节点，stack中存放左子树节点，只要有一个不是null说明还要继续遍历
+            // cur表示当前遍历的节点，stack存放等待访问的节点
             while (!stack.isEmpty() || cur != null) {
                 // 从根节点开始一直往左走
                 while (cur != null) {

@@ -73,6 +73,9 @@ package leetcode.editor.cn;
 
 import structure.TreeNode;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 //Java：二叉树最大宽度
 public class P662MaximumWidthOfBinaryTree {
     public static void main(String[] args) {
@@ -98,7 +101,36 @@ public class P662MaximumWidthOfBinaryTree {
      */
     class Solution {
         public int widthOfBinaryTree(TreeNode root) {
-            return 0;
+            // 广度优先遍历
+            if (root == null) {
+                return 0;
+            }
+            Queue<TreeNode> nodeQueue = new LinkedList<>();
+            Queue<Integer> numberQueue = new LinkedList<>();
+            nodeQueue.offer(root);
+            numberQueue.offer(1);
+            int maxWidth = 0;
+            while (!nodeQueue.isEmpty()) {
+                int size = nodeQueue.size();
+                int leftNum = numberQueue.peek();
+                for (int i = 0; i < size; i++) {
+                    TreeNode node = nodeQueue.poll();
+                    int num = numberQueue.poll();
+                    if (node.left != null) {
+                        nodeQueue.offer(node.left);
+                        numberQueue.offer(num * 2);
+                    }
+                    if (node.right != null) {
+                        nodeQueue.offer(node.right);
+                        numberQueue.offer(num * 2 + 1);
+                    }
+                    if (i == size - 1) {
+                        // 计算当前层的宽度
+                        maxWidth = Math.max(maxWidth, num - leftNum + 1);
+                    }
+                }
+            }
+            return maxWidth;
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)
