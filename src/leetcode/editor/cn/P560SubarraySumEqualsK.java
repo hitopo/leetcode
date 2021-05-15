@@ -43,7 +43,7 @@ public class P560SubarraySumEqualsK {
                 sum[i + 1] = tempSum;
             }
             int cnt = 0;
-            // 在sum找出某两个的和
+            // 在sum找出某两个的差是k，这里的方法是借鉴的两数之和
             Set<Integer> set = new HashSet<>();
             for (int i = 0; i <= n; i++) {
                 int target = sum[i] - k;

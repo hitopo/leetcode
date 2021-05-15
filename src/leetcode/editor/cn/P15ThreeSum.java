@@ -36,37 +36,40 @@ public class P15ThreeSum {
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
         public List<List<Integer>> threeSum(int[] nums) {
-            // 固定一个找另外两个，麻烦在于跳过重复的
-            // 使用set去重
+            // 关键在于去重，固定一个去寻找另外两个
             List<List<Integer>> resList = new ArrayList<>();
-            // 返回的是元素的值，排序可以帮助去除重复
-            if (nums.length < 3) {
+            int n = nums.length;
+            if (n == 0) {
                 return resList;
             }
             Arrays.sort(nums);
-            for (int i = 0; i < nums.length; i++) {
-                // 第一个元素也不能一样
+            for (int i = 0; i < n; i++) {
                 if (i > 0 && nums[i] == nums[i - 1]) {
                     continue;
                 }
-                int target = -nums[i];
                 int j = i + 1;
-                int k = nums.length - 1;
+                int k = n - 1;
                 while (j < k) {
-                    int sum = nums[j] + nums[k];
-                    if (sum == target) {
+                    int sum = nums[i] + nums[j] + nums[k];
+                    if (sum == 0) {
                         resList.add(Arrays.asList(nums[i], nums[j], nums[k]));
-                        while (j < k && nums[j + 1] == nums[j]) {
+                        while (j < k && nums[j] == nums[j + 1]) {
                             j++;
                         }
-                        while (j < k && nums[k - 1] == nums[k]) {
+                        j++;
+                        while (j < k && nums[k] == nums[k - 1]) {
                             k--;
                         }
-                        j++;
                         k--;
-                    } else if (sum < target) {
+                    } else if (sum < 0) {
+                        while (j < k && nums[j] == nums[j + 1]) {
+                            j++;
+                        }
                         j++;
                     } else {
+                        while (j < k && nums[k] == nums[k - 1]) {
+                            k--;
+                        }
                         k--;
                     }
                 }

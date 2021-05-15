@@ -55,32 +55,33 @@ public class P3LongestSubstringWithoutRepeatingCharacters {
     public static void main(String[] args) {
         Solution solution = new P3LongestSubstringWithoutRepeatingCharacters().new Solution();
         // TO TEST
+        System.out.println(solution.lengthOfLongestSubstring("pwwkew"));
     }
 
     // leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
         public int lengthOfLongestSubstring(String s) {
-            // 滑动窗口
+            int n = s.length();
             if (s.isEmpty() || s.length() == 1) {
                 return s.length();
             }
+            char[] chars = s.toCharArray();
             // 滑动窗口
             int l = 0;
             int r = 0;
-            // 记录每个字母最后出现的位置
+            int maxLen = 0;
+            // 存放滑动窗口中的字符情况，key-字母，value-最后出现的位置
             Map<Character, Integer> map = new HashMap<>();
-            int maxLength = 0;
-            char[] chars = s.toCharArray();
-            // s[l, r)
-            while (r < chars.length) {
+            while (r < n) {
+                // 如果此时右边界出现的字符在l右边出现过，那么更新左边界
                 if (map.containsKey(chars[r]) && map.get(chars[r]) >= l) {
                     l = map.get(chars[r]) + 1;
                 }
-                maxLength = Math.max(maxLength, r - l + 1);
+                maxLen = Math.max(maxLen, r - l + 1);
                 map.put(chars[r], r);
                 r++;
             }
-            return maxLength;
+            return maxLen;
         }
     }
     // leetcode submit region end(Prohibit modification and deletion)

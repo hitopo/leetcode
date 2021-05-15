@@ -67,38 +67,38 @@ public class P48RotateImage {
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
         public void rotate(int[][] matrix) {
-            // 递归
-            int n = matrix.length;
-            rotate(matrix, 0, n - 1);
+            // 先转置，之后每行做镜面对称
+            int nRows = matrix.length;
+            if (nRows == 0) {
+                return;
+            }
+            int nCols = matrix[0].length;
+            // 转置
+            for (int i = 0; i < nRows; i++) {
+                for (int j = 0; j < i; j++) {
+                    swap(matrix, i, j, j, i);
+                }
+            }
+            // 逐行镜面对称
+            for (int i = 0; i < nRows; i++) {
+                int j = 0;
+                int k = nCols - 1;
+                while (j < k) {
+                    swap(matrix, i, j, i, k);
+                    j++;
+                    k--;
+                }
+            }
         }
 
         /**
-         * 递归函数执行一次表示调整完外围一圈数据
-         * @param start 开始下标
-         * @param end   结束下标
+         * 交换矩阵中(x1, y1)和(x2, y2)处的元素值
+         * @param matrix 矩阵
          */
-        private void rotate(int[][] matrix, int start, int end) {
-            // num表示当前矩阵还有的数字个数
-            int num = end - start + 1;
-            if (num > 0) {
-                // 还有待处理的矩阵
-                for (int i = 0; i < num - 1; i++) {
-                    int x1 = start;
-                    int y1 = start + i;
-                    int x2 = start + i;
-                    int y2 = end;
-                    int x3 = end;
-                    int y3 = end - i;
-                    int x4 = end - i;
-                    int y4 = start;
-                    int temp = matrix[x1][y1];
-                    matrix[x1][y1] = matrix[x4][y4];
-                    matrix[x4][y4] = matrix[x3][y3];
-                    matrix[x3][y3] = matrix[x2][y2];
-                    matrix[x2][y2] = temp;
-                }
-                rotate(matrix, start + 1, end - 1);
-            }
+        private void swap(int[][] matrix, int x1, int y1, int x2, int y2) {
+            int temp = matrix[x1][y1];
+            matrix[x1][y1] = matrix[x2][y2];
+            matrix[x2][y2] = temp;
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)

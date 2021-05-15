@@ -61,7 +61,7 @@ public class P295FindMedianFromDataStream {
             // 注意两个半边长度之差不能超过1，右边较多
             // 数据先添加进左边，然后左边挤出一个最大的到右边
             // 如果右边长度较大，右边挤出一个最小的到左边
-            // 注意保证左边长度始终大于等于右边，最多打1
+            // 注意保证左边长度始终大于等于右边，最多大1
             leftMaxHeap.add(num);
             rightMinHeap.add(leftMaxHeap.remove());
             if (rightMinHeap.size() > leftMaxHeap.size()) {

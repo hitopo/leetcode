@@ -53,11 +53,11 @@ public class P40CombinationSumIi {
             List<List<Integer>> resList = new ArrayList<>();
             List<Integer> list = new ArrayList<>();
             Arrays.sort(candidates);
-            dfs(candidates, 0, 0, target, list, resList);
+            helper(candidates, 0, 0, target, list, resList);
             return resList;
         }
 
-        private void dfs(int[] candidates, int pos, int sum, int target, List<Integer> list, List<List<Integer>> resList) {
+        private void helper(int[] candidates, int pos, int sum, int target, List<Integer> list, List<List<Integer>> resList) {
             if (sum > target) {
                 return;
             }
@@ -71,8 +71,8 @@ public class P40CombinationSumIi {
                     continue;
                 }
                 list.add(candidates[i]);
-                // 注意数字是可以无限选取的，所以下一个pos还是i而不是i+1
-                dfs(candidates, i + 1, sum + candidates[i], target, list, resList);
+                // 该题的数字不能无限选取的，所以下一个pos是i+1而不是i
+                helper(candidates, i + 1, sum + candidates[i], target, list, resList);
                 list.remove(list.size() - 1);
             }
         }

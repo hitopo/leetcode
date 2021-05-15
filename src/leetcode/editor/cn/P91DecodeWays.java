@@ -82,6 +82,7 @@ public class P91DecodeWays {
             dp[0] = 1;
             dp[1] = 1;
             for (int i = 2; i <= s.length(); i++) {
+                // 当前数字是0的话只能和前面的组成一起，dp[i] = dp[i-2]
                 dp[i] = s.charAt(i - 1) == '0' ? 0 : dp[i - 1];
                 if (s.charAt(i - 2) == '1' || (s.charAt(i - 2) == '2' && s.charAt(i - 1) <= '6')) {
                     dp[i] += dp[i - 2];

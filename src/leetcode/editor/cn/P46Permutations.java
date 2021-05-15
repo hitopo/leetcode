@@ -34,11 +34,11 @@ public class P46Permutations {
         public List<List<Integer>> permute(int[] nums) {
             List<List<Integer>> resList = new ArrayList<>();
             List<Integer> list = new ArrayList<>();
-            dfs(nums, new boolean[nums.length], list, resList);
+            permuteHelper(nums, new boolean[nums.length], list, resList);
             return resList;
         }
 
-        private void dfs(int[] nums, boolean[] visited, List<Integer> list, List<List<Integer>> resList) {
+        private void permuteHelper(int[] nums, boolean[] visited, List<Integer> list, List<List<Integer>> resList) {
             if (list.size() == nums.length) {
                 resList.add(new ArrayList<>(list));
                 return;
@@ -47,7 +47,7 @@ public class P46Permutations {
                 if (!visited[i]) {
                     visited[i] = true;
                     list.add(nums[i]);
-                    dfs(nums, visited, list, resList);
+                    permuteHelper(nums, visited, list, resList);
                     list.remove(list.size() - 1);
                     visited[i]   = false;
                 }
