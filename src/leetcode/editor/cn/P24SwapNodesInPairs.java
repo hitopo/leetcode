@@ -69,10 +69,12 @@ public class P24SwapNodesInPairs {
                 // 没有元素或者只有单个元素
                 return head;
             }
-            ListNode second = head.next;
+            ListNode first = head;
+            ListNode second = first.next;
             ListNode third = second.next;
-            second.next = head;
-            head.next = swapPairs(third);
+            // 翻转
+            second.next = first;
+            first.next = swapPairs(third);
             return second;
         }
     }

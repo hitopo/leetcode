@@ -52,16 +52,16 @@ public class P89GrayCode {
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
         public List<Integer> grayCode(int n) {
-            // 上下镜面
+            // 这题直接背答案算了，没啥意思
             List<Integer> list = new ArrayList<>();
             list.add(0);
             if (n == 0) {
                 return list;
             }
             for (int i = 0; i < n; i++) {
-                int addValue = (int) Math.pow(2, i);
+                int value = (int) Math.pow(2, i);
                 for (int j = list.size() - 1; j >= 0; j--) {
-                    list.add(list.get(j) + addValue);
+                    list.add(list.get(j) + value);
                 }
             }
             return list;

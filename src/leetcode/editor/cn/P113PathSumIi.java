@@ -79,29 +79,25 @@ public class P113PathSumIi {
         public List<List<Integer>> pathSum(TreeNode root, int targetSum) {
             List<List<Integer>> resList = new ArrayList<>();
             List<Integer> list = new ArrayList<>();
-            dfs(root, targetSum, list, resList);
+            dfs(root, 0, targetSum, list, resList);
             return resList;
         }
 
-        private void dfs(TreeNode root, int target, List<Integer> list, List<List<Integer>> resList) {
+        private void dfs(TreeNode root, int curSum, int target, List<Integer> list, List<List<Integer>> resList) {
             if (root == null) {
                 return;
             }
-
-            // 成功条件
-            if (root.left == null && root.right == null && target == root.val) {
-                list.add(root.val);
-                resList.add(new ArrayList<>(list));
-                list.remove(list.size() - 1);
-                return;
-            }
             // 访问当前节点
-            target -= root.val;
+            curSum += root.val;
             list.add(root.val);
-            // 访问左右子树
-            dfs(root.left, target, list, resList);
-            dfs(root.right, target, list, resList);
-            // 删除最后一个节点，恢复现场
+            if (root.left == null && root.right == null && curSum == target) {
+                // 当前是叶子节点并且和符合要求
+                resList.add(new ArrayList<>(list));
+            } else {
+                dfs(root.left, curSum, target, list, resList);
+                dfs(root.right, curSum, target, list, resList);
+            }
+            // 注意好恢复现场的时机
             list.remove(list.size() - 1);
         }
     }

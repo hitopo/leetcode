@@ -26,12 +26,14 @@
 package leetcode.editor.cn;
 
 import structure.ListNode;
+import utils.ListNodeUtil;
 
 //Java：奇偶链表
 public class P328OddEvenLinkedList {
     public static void main(String[] args) {
         Solution solution = new P328OddEvenLinkedList().new Solution();
         // TO TEST
+        ListNodeUtil.printListNode(solution.oddEvenList(ListNodeUtil.createListNode(new int[]{1, 2, 3, 4, 5})));
     }
     //leetcode submit region begin(Prohibit modification and deletion)
 
@@ -50,7 +52,20 @@ public class P328OddEvenLinkedList {
             if (head == null || head.next == null || head.next.next == null) {
                 return head;
             }
-            return null;
+            // o为奇数链表尾节点
+            ListNode o = head;
+            // p是偶数链表头结点
+            ListNode p = head.next;
+            // e是偶数链表尾节点
+            ListNode e = p;
+            while (o.next != null && e.next != null) {
+                o.next = e.next;
+                o = o.next;
+                e.next = o.next;
+                e = e.next;
+            }
+            o.next = p;
+            return head;
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)

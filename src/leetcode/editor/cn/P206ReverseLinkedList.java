@@ -35,19 +35,17 @@ public class P206ReverseLinkedList {
      */
     class Solution {
         public ListNode reverseList(ListNode head) {
-            // 试试迭代法
-            if (head == null || head.next == null) {
-                return head;
+            return reverseList(null, head);
+        }
+
+        private ListNode reverseList(ListNode pre, ListNode cur) {
+            // 只有一个节点
+            if (cur == null) {
+                return pre;
             }
-            ListNode pre = null;
-            ListNode cur = head;
-            while (cur != null) {
-                ListNode curNext = cur.next;
-                cur.next = pre;
-                pre = cur;
-                cur = curNext;
-            }
-            return pre;
+            ListNode nextNode = cur.next;
+            cur.next = pre;
+            return reverseList(cur, nextNode);
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)
