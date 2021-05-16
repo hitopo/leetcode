@@ -91,7 +91,6 @@ public class P146LruCache {
         }
 
         public void put(int key, int value) {
-            map.put(key, value);
             if (map.containsKey(key)) {
                 // 访问了节点
                 doubleList.visit(key);
@@ -104,6 +103,7 @@ public class P146LruCache {
                 // 在双向链表的末尾新增节点
                 doubleList.addToTail(key);
             }
+            map.put(key, value);
         }
     }
 
