@@ -20,48 +20,36 @@
 
 package leetcode.editor.cn;
 
-import java.util.Random;
-
 //Java：数组中的第K个最大元素
 public class P215KthLargestElementInAnArray {
     public static void main(String[] args) {
         Solution solution = new P215KthLargestElementInAnArray().new Solution();
         // TO TEST
-        System.out.println(solution.findKthLargest(new int[]{3, 2, 1, 5, 6, 4}, 2));
+        System.out.println(solution.findKthLargest(new int[]{3, 2, 3, 1, 2, 4, 5, 5, 6}, 4));
     }
 
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
-        private Random random = new Random(System.currentTimeMillis());
-
         public int findKthLargest(int[] nums, int k) {
-            int len = nums.length;
-            int left = 0;
-            int right = len - 1;
-            int target = len - k;
+            // 快速选择算法
+            int n = nums.length;
+            int target = n - k;
+            int l = 0;
+            int r = n - 1;
             while (true) {
-                // index表示的是快速排序一次的完成的那个下标元素
-                int sortedIdx = partition(nums, left, right);
-                if (sortedIdx < target) {
-                    left = sortedIdx + 1;
-                } else if (sortedIdx > target) {
-                    right = sortedIdx - 1;
+                int idx = partition(nums, l, r);
+                if (idx < target) {
+                    l = idx + 1;
+                } else if (idx > target) {
+                    r = idx - 1;
                 } else {
-                    return nums[sortedIdx];
+                    return nums[idx];
                 }
             }
         }
 
-        private int partition(int[] nums, int left, int right) {
-            // // 随机选择一个元素作为轴
-            // if (left > right) {
-            //     int randomIdx = left + random.nextInt(right - left + 1);
-            //     // 选择过轴之后要把轴元素交换到最左边
-            //     swap(nums, left, randomIdx);
-            // }
-            int pivot = nums[left];
-            int l = left;
-            int r = right;
+        private int partition(int[] nums, int l, int r) {
+            int pivot = nums[l];
             while (l < r) {
                 while (l < r && nums[r] >= pivot) {
                     r--;
@@ -79,14 +67,7 @@ public class P215KthLargestElementInAnArray {
                 }
             }
             nums[l] = pivot;
-            // 最终排序好的元素是位置l的元素
             return l;
-        }
-
-        private void swap(int[] nums, int i, int j) {
-            int tmp = nums[i];
-            nums[i] = nums[j];
-            nums[j] = tmp;
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)
