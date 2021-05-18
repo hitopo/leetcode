@@ -57,7 +57,8 @@
 
 package leetcode.editor.cn;
 
-import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 //Java：LRU 缓存机制
@@ -72,13 +73,10 @@ public class P146LruCache {
     //leetcode submit region begin(Prohibit modification and deletion)
     class LRUCache {
         private Map<Integer, Integer> map;
-        // 双向链表虚拟头尾
-        private DoubleList doubleList;
         private int capacity;
 
         public LRUCache(int capacity) {
-            map = new HashMap<>();
-            doubleList = new DoubleList();
+            map = new LinkedHashMap<>();
             this.capacity = capacity;
         }
 
@@ -86,102 +84,24 @@ public class P146LruCache {
             if (!map.containsKey(key)) {
                 return -1;
             }
-            doubleList.visit(key);
-            return map.get(key);
+            int value = map.get(key);
+            map.remove(key);
+            map.put(key, value);
+            return value;
         }
 
         public void put(int key, int value) {
             if (map.containsKey(key)) {
-                // 访问了节点
-                doubleList.visit(key);
-            } else {
-                if (map.size() == capacity) {
-                    // 若满，移除最久远的那个节点，就是双向链表的头结点
-                    DoubleListNode node = doubleList.removeHead();
-                    map.remove(node.val);
-                }
-                // 在双向链表的末尾新增节点
-                doubleList.addToTail(key);
+                map.remove(key);
+            } else if (map.size() == capacity) {
+                Iterator<Map.Entry<Integer, Integer>> iterator = map.entrySet().iterator();
+                iterator.next();
+                iterator.remove();
             }
             map.put(key, value);
         }
     }
 
-    /**
-     * 双向链表
-     */
-    class DoubleList {
-        public DoubleListNode head;
-        public DoubleListNode tail;
-
-        public DoubleList() {
-            head = new DoubleListNode();
-            tail = new DoubleListNode();
-            head.next = tail;
-            tail.prev = head;
-        }
-
-        public void moveNodeToTail(DoubleListNode node) {
-            //从节点中剥离
-            node.prev.next = node.next;
-            node.next.prev = node.prev;
-            // 加入到尾部
-            addToTail(node);
-        }
-
-        public DoubleListNode searchNode(int val) {
-            DoubleListNode p = head;
-            while (p != tail) {
-                if (p.val == val) {
-                    return p;
-                }
-                p = p.next;
-            }
-            return null;
-        }
-
-        public void visit(int val) {
-            // 双向链表中间存的是key，Map中存放的是key-value
-            DoubleListNode keyNode = searchNode(val);
-            // 访问key，就将对应的key节点移动到双向链表的末尾
-            moveNodeToTail(keyNode);
-        }
-
-        public DoubleListNode removeHead() {
-            DoubleListNode firstKeyNode = head.next;
-            head.next = firstKeyNode.next;
-            firstKeyNode.next.prev = head;
-            return firstKeyNode;
-        }
-
-        public void addToTail(int val) {
-            DoubleListNode newNode = new DoubleListNode(val);
-            addToTail(newNode);
-        }
-
-        private void addToTail(DoubleListNode node) {
-            node.prev = tail.prev;
-            node.next = tail;
-            tail.prev.next = node;
-            tail.prev = node;
-        }
-    }
-
-    /**
-     * 双向链表节点
-     */
-    class DoubleListNode {
-        public int val;
-        public DoubleListNode prev;
-        public DoubleListNode next;
-
-        public DoubleListNode() {
-        }
-
-        public DoubleListNode(int val) {
-            this.val = val;
-        }
-    }
     /**
      * Your LRUCache object will be instantiated and called as such:
      * LRUCache obj = new LRUCache(capacity);

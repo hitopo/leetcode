@@ -95,13 +95,14 @@ public class P138CopyListWithRandomPointer {
             if (head == null) {
                 return null;
             }
+            // 先复制节点
             Node p = head;
             while (p != null) {
                 Node newNode = new Node(p.val);
-                Node next = p.next;
+                Node pNext = p.next;
                 p.next = newNode;
-                newNode.next = next;
-                p = next;
+                newNode.next = pNext;
+                p = pNext;
             }
             p = head;
             // 设置random
@@ -111,8 +112,9 @@ public class P138CopyListWithRandomPointer {
                 }
                 p = p.next.next;
             }
-            Node dummyNode = new Node(-1);
+            // 分离链表，新建链表头结点，用头插法
             p = head;
+            Node dummyNode = new Node(-1);
             Node cur = dummyNode;
             while (p != null) {
                 cur.next = p.next;

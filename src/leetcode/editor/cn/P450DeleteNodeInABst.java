@@ -84,35 +84,24 @@ public class P450DeleteNodeInABst {
                 root.right = deleteNode(root.right, key);
                 return root;
             }
-            // 自己就是需要删除的节点
+            // 当前节点就是要删除的节点
             if (root.left == null) {
                 return root.right;
             }
             if (root.right == null) {
                 return root.left;
             }
-            // 左右子树都存在，删除左子树中最大的那个节点，返回新的头结点
-            TreeNode predecessor = max(root.left);
-            TreeNode predecessorCopy = new TreeNode(predecessor.val);
-            predecessorCopy.left = removeMax(root.left);
-            predecessorCopy.right = root.right;
-            return predecessorCopy;
-        }
-
-        private TreeNode removeMax(TreeNode root) {
-            if (root.right == null) {
-                return root.left;
-            }
-            root.right = removeMax(root.right);
+            // 左右子树都存在，找到右子树的最小值，替换掉当前节点
+            TreeNode rightMinNode = getMin(root.right);
+            root.val = rightMinNode.val;
+            // 删掉最小的那个节点
+            root.right = deleteNode(root.right, rightMinNode.val);
             return root;
         }
 
-        private TreeNode max(TreeNode root) {
-            if (root == null) {
-                return null;
-            }
-            while (root.right != null) {
-                root = root.right;
+        private TreeNode getMin(TreeNode root) {
+            while (root.left != null) {
+                root = root.left;
             }
             return root;
         }

@@ -70,7 +70,7 @@ public class P3LongestSubstringWithoutRepeatingCharacters {
             int l = 0;
             int r = 0;
             int maxLen = 0;
-            // 存放滑动窗口中的字符情况，key-字母，value-最后出现的位置
+            // 存放滑动窗口中的字符情况，key-字母，value- key对应的字符串最后出现的位置
             Map<Character, Integer> map = new HashMap<>();
             while (r < n) {
                 // 如果此时右边界出现的字符在l右边出现过，那么更新左边界

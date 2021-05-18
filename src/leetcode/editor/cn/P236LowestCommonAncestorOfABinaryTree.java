@@ -74,20 +74,27 @@ public class P236LowestCommonAncestorOfABinaryTree {
                 // p或者q是根节点，那么显然公共祖先只能是根节点
                 return root;
             }
-            // 从左右子树分别单独查找最近的公共祖先
-            TreeNode left = lowestCommonAncestor(root.left, p, q);
-            TreeNode right = lowestCommonAncestor(root.right, p, q);
-            if (left != null && right != null) {
-                // 如果left和right都出现了，说明左右子树的返回值就是p和q, 此时root为LCA
-                return root;
-            } else if (left != null) {
-                // 如果left和right一个为空，另一个不是空说明p、q只在某个子树底下出现，那么它一定是结果
-                return left;
-            } else if (right != null) {
-                //还有一种可能就是，由下面返回的公共祖先，并将这个值一路返回到最表层
-                return right;
+            if (find(root.left, p) && find(root.left, q)) {
+                return lowestCommonAncestor(root.left, p, q);
             }
-            return null;
+            if (find(root.right, p) && find(root.right, q)) {
+                return lowestCommonAncestor(root.right, p, q);
+            }
+            // p、q分属root两侧，root就是p、q最近公共祖先
+            return root;
+        }
+
+        /**
+         * 判断root节点为根节点的树下面是否存在node节点
+         */
+        private boolean find(TreeNode root, TreeNode node) {
+            if (root == null) {
+                return false;
+            }
+            if (root == node) {
+                return true;
+            }
+            return find(root.left, node) || find(root.right, node);
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)
