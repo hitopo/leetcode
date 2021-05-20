@@ -89,8 +89,10 @@ public class P4MedianOfTwoSortedArrays {
             int midVal1 = i + k / 2 - 1 < nums1.length ? nums1[i + k / 2 - 1] : Integer.MAX_VALUE;
             int midVal2 = j + k / 2 - 1 < nums2.length ? nums2[j + k / 2 - 1] : Integer.MAX_VALUE;
             if (midVal1 < midVal2) {
+                // nums1的中间数字较小，淘汰掉[i, i + k/2 -1]共k/2个数字
                 return findKth(nums1, i + k / 2, nums2, j, k - k / 2);
             } else {
+                // nums2的中间数字较小，淘汰掉nums2[j, j + k/2 - 1]共k/2个数字
                 return findKth(nums1, i, nums2, j + k / 2, k - k / 2);
             }
         }
