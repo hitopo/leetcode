@@ -44,6 +44,7 @@ public class P847ShortestPathVisitingAllNodes {
     public static void main(String[] args) {
         Solution solution = new P847ShortestPathVisitingAllNodes().new Solution();
         // TO TEST
+        System.out.println(solution.shortestPathLength(new int[][]{{1}, {0, 2, 4}, {1, 3, 4}, {2}, {1, 2}}));
     }
 
     //leetcode submit region begin(Prohibit modification and deletion)
@@ -58,7 +59,7 @@ public class P847ShortestPathVisitingAllNodes {
             boolean[][] visited = new boolean[n][1 << n];
             // 用来检查是否访问完所有的节点，每一位代表节点的每个节点的状态，结束的状态就是全是1
             int finishState = (1 << n) - 1;
-            // 数组第一个是标号，第二个是状态
+            // 数组中第一个元素是当前的节点，第二个是已经访问过的节点，用十进制的数字存储，逻辑上是二进制存每个节点的访问状态
             Queue<int[]> queue = new LinkedList<>();
             for (int i = 0; i < n; i++) {
                 queue.offer(new int[]{i, 1 << i});
@@ -66,11 +67,15 @@ public class P847ShortestPathVisitingAllNodes {
             int step = 0;
             while (!queue.isEmpty()) {
                 for (int i = queue.size(); i > 0; i--) {
+                    // 当前处理的节点
                     int[] node = queue.poll();
+                    // 判断是否已经结束
                     if (finishState == node[1]) {
                         return step;
                     }
+                    // 尝试跳转到下一个节点
                     for (int next : graph[node[0]]) {
+                        // 跳转到写一个节点时的状态
                         int nextState = node[1] | (1 << next);
                         if (visited[next][nextState]) {
                             continue;
@@ -79,6 +84,7 @@ public class P847ShortestPathVisitingAllNodes {
                         queue.offer(new int[]{next, nextState});
                     }
                 }
+                // 每走一层，step++
                 step++;
             }
             return step;
