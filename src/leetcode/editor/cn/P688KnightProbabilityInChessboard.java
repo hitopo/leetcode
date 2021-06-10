@@ -47,19 +47,46 @@ public class P688KnightProbabilityInChessboard {
     public static void main(String[] args) {
         Solution solution = new P688KnightProbabilityInChessboard().new Solution();
         // TO TEST
+        System.out.println(solution.knightProbability(3, 2, 0, 0));
     }
 
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
-        private int[] dx = {-1, -2, -2, -1, 1, 2, 2, 1};
-        private int[] dy = {-2, -1, 1, 2, -2, -1, 1, 2};
+        private int[] dr = {-1, -2, -2, -1, 1, 2, 2, 1};
+        private int[] dc = {-2, -1, 1, 2, -2, -1, 1, 2};
+        private double[][][] memo;
 
         public double knightProbability(int n, int k, int row, int column) {
             // 从当前位置尝试出发
             if (k == 0) {
                 return 1.0;
             }
-            return 1.0;
+            memo = new double[n][n][k + 1];
+            return dfs(n, k, row, column);
+        }
+
+        private double dfs(int n, int k, int r, int c) {
+            if (!locInBoard(n, r, c)) {
+                return 0.0;
+            }
+            if (k == 0) {
+                return 1.0;
+            }
+            if (memo[r][c][k] != 0) {
+                return memo[r][c][k];
+            }
+            double prob = 0.0;
+            for (int i = 0; i < 8; i++) {
+                int newR = r + dr[i];
+                int newC = c + dc[i];
+                prob += dfs(n, k - 1, newR, newC) / 8.0;
+            }
+            memo[r][c][k] = prob;
+            return prob;
+        }
+
+        private boolean locInBoard(int n, int r, int c) {
+            return r >= 0 && r < n && c >= 0 && c < n;
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)
