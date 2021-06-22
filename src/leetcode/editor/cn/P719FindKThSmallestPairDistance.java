@@ -28,8 +28,7 @@
 
 package leetcode.editor.cn;
 
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.Arrays;
 
 //Java：找出第 k 小的距离对
 public class P719FindKThSmallestPairDistance {
@@ -42,19 +41,37 @@ public class P719FindKThSmallestPairDistance {
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
         public int smallestDistancePair(int[] nums, int k) {
-            // 直观上的解决方案是用堆，借鉴之前找出第k小的数字类似的思路
+            Arrays.sort(nums);
             int n = nums.length;
-            Queue<int[]> heap = new PriorityQueue<>(((o1, o2) -> Math.abs(o2[0] - o2[1]) - Math.abs(o1[0] - o1[1])));
-            for (int i = 0; i < n; i++) {
-                for (int j = i + 1; j < n; j++) {
-                    heap.add(new int[]{nums[i], nums[j]});
-                    if (heap.size() > k) {
-                        heap.poll();
-                    }
+            int left = 0;
+            // 数对最远的距离
+            int right = nums[n - 1] - nums[0];
+            while (left <= right) {
+                // 距离中间的距离
+                int mid = left + (right - left) / 2;
+                if (getCount(nums, mid) < k) {
+                    left = mid + 1;
+                } else {
+                    right = mid - 1;
                 }
             }
-            int[] res = heap.peek();
-            return Math.abs(res[0] - res[1]);
+            return left;
+        }
+
+        /**
+         * 计算nums数组中距离小于等于dis的距离对个数
+         * 方法里面使用的是滑动窗口法
+         */
+        private int getCount(int[] nums, int dis) {
+            int l = 0;
+            int cnt = 0;
+            for (int r = 0; r < nums.length; r++) {
+                while (nums[r] - nums[l] > dis) {
+                    l++;
+                }
+                cnt += r - l;
+            }
+            return cnt;
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)
