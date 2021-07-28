@@ -17,29 +17,32 @@
 
 package leetcode.editor.cn;
 
+import java.util.Arrays;
+
 //Java：移动零
 public class P283MoveZeroes {
     public static void main(String[] args) {
         Solution solution = new P283MoveZeroes().new Solution();
         // TO TEST
+        int[] nums = {0, 1, 0, 3, 12};
+        solution.moveZeroes(nums);
+        System.out.println(Arrays.toString(nums));
     }
 
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
         public void moveZeroes(int[] nums) {
             // 移动0
-            int zeroNum = 0;
-            for (int i = 0; i < nums.length; i++) {
-                if (nums[i] == 0) {
-                    zeroNum++;
-                } else {
-                    nums[i - zeroNum] = nums[i];
+            int i = 0;
+            for (int j = 0; j < nums.length; j++) {
+                int num = nums[j];
+                if (num != 0) {
+                    nums[i] = nums[j];
+                    i++;
                 }
             }
-            // 末尾设置0
-            while (zeroNum > 0) {
-                nums[nums.length - zeroNum] = 0;
-                zeroNum--;
+            for (int j = i; j < nums.length; j++) {
+                nums[j] = 0;
             }
         }
     }

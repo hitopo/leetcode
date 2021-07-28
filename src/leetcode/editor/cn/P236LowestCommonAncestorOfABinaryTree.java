@@ -66,35 +66,28 @@ public class P236LowestCommonAncestorOfABinaryTree {
      */
     class Solution {
         public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+            // 递归终止的条件，有两个，一个是null，还有一个是当前节点就是p或者q
             if (root == null) {
-                // 遍历到叶子节点显然不会存在p和q的最近公共祖先
                 return null;
             }
             if (root == p || root == q) {
-                // p或者q是根节点，那么显然公共祖先只能是根节点
                 return root;
             }
-            if (find(root.left, p) && find(root.left, q)) {
-                return lowestCommonAncestor(root.left, p, q);
+            // 函数的返回值是p、q的最近公共祖先或者是p和q本身
+            TreeNode left = lowestCommonAncestor(root.left, p, q);
+            TreeNode right = lowestCommonAncestor(root.right, p, q);
+            if (left != null && right != null) {
+                // p、q分布在root的左右两侧
+                return root;
             }
-            if (find(root.right, p) && find(root.right, q)) {
-                return lowestCommonAncestor(root.right, p, q);
+            // 只有一个不是null说明不是null的那个就是结果
+            if (left != null) {
+                return left;
             }
-            // p、q分属root两侧，root就是p、q最近公共祖先
-            return root;
-        }
-
-        /**
-         * 判断root节点为根节点的树下面是否存在node节点
-         */
-        private boolean find(TreeNode root, TreeNode node) {
-            if (root == null) {
-                return false;
+            if (right != null) {
+                return right;
             }
-            if (root == node) {
-                return true;
-            }
-            return find(root.left, node) || find(root.right, node);
+            return null;
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)
