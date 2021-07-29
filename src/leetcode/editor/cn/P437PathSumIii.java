@@ -56,21 +56,27 @@ public class P437PathSumIii {
      * }
      */
     class Solution {
+        private int res = 0;
+
         public int pathSum(TreeNode root, int targetSum) {
             if (root == null) {
                 return 0;
             }
-            return pathSum(root.left, targetSum) + pathSum(root.right, targetSum) + fromRootPathSum(root, 0, targetSum);
+            dfs(root, targetSum);
+            pathSum(root.left, targetSum);
+            pathSum(root.right, targetSum);
+            return res;
         }
 
-        private int fromRootPathSum(TreeNode root, int curSum, int targetSum) {
-            // 包含当前节点的和有多少个
+        private void dfs(TreeNode root, int sum) {
             if (root == null) {
-                return 0;
+                return;
             }
-            curSum += root.val;
-            return (curSum == targetSum ? 1 : 0) + fromRootPathSum(root.left, curSum, targetSum) +
-                    fromRootPathSum(root.right, curSum, targetSum);
+            if (root.val == sum) {
+                res++;
+            }
+            dfs(root.left, sum - root.val);
+            dfs(root.right, sum - root.val);
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)

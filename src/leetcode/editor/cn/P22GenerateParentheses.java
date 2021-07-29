@@ -43,28 +43,29 @@ public class P22GenerateParentheses {
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
         public List<String> generateParenthesis(int n) {
+            // 生成括号
             List<String> list = new ArrayList<>();
-            generate(n, n, new StringBuilder(), list);
+            generateParenthesis(n, n, new StringBuilder(), list);
             return list;
         }
 
-        private void generate(int leftQuoteNum, int rightQuoteNum, StringBuilder sb, List<String> list) {
-            if (leftQuoteNum == 0 && rightQuoteNum == 0) {
+        private void generateParenthesis(int lLeft, int rLeft, StringBuilder sb, List<String> list) {
+            if (lLeft == 0 && rLeft == 0) {
                 list.add(sb.toString());
                 return;
             }
-            if (leftQuoteNum > 0) {
+            if (lLeft > 0) {
                 sb.append("(");
-                generate(leftQuoteNum - 1, rightQuoteNum, sb, list);
+                generateParenthesis(lLeft - 1, rLeft, sb, list);
                 sb.deleteCharAt(sb.length() - 1);
             }
-            // rightQuoteNum > leftQuoteNum是为了保证在生成右括号之前已经已经生成了足够的左括号
-            if (rightQuoteNum > 0 && rightQuoteNum > leftQuoteNum) {
+            if (rLeft > 0 && rLeft > lLeft) {
                 sb.append(")");
-                generate(leftQuoteNum, rightQuoteNum - 1, sb, list);
+                generateParenthesis(lLeft, rLeft - 1, sb, list);
                 sb.deleteCharAt(sb.length() - 1);
             }
         }
+
     }
     //leetcode submit region end(Prohibit modification and deletion)
 

@@ -62,26 +62,26 @@ public class P124BinaryTreeMaximumPathSum {
      * }
      */
     class Solution {
-        private int max = Integer.MIN_VALUE;
+
+        private int maxSum = Integer.MIN_VALUE;
 
         public int maxPathSum(TreeNode root) {
-            calcMax(root);
-            return max;
-        }
-
-        /**
-         * 计算包含root节点的最大值
-         * @param root 根节点
-         */
-        private int calcMax(TreeNode root) {
+            // 从任意节点到任意节点的和
             if (root == null) {
                 return 0;
             }
-            int leftMax = Math.max(calcMax(root.left), 0);
-            int rightMax = Math.max(calcMax(root.right), 0);
-            max = Math.max(max, root.val + leftMax + rightMax);
-            // 注意向上返回的时候带有root.val，左右子树只能选择一个
-            return root.val + Math.max(leftMax, rightMax);
+            maxPath(root);
+            return maxSum;
+        }
+
+        public int maxPath(TreeNode root) {
+            if (root == null) {
+                return 0;
+            }
+            int leftMax = maxPath(root.left);
+            int rightMax = maxPath(root.right);
+            maxSum = Math.max(maxSum, leftMax + rightMax + root.val);
+            return Math.max(0, root.val + Math.max(leftMax, rightMax));
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)

@@ -59,49 +59,44 @@ public class P863AllNodesDistanceKInBinaryTree {
      * }
      */
     class Solution {
-        // 记录树中某个节点的父节点
-        private Map<TreeNode, TreeNode> map;
+        private Map<TreeNode, TreeNode> fatherMap;
 
         public List<Integer> distanceK(TreeNode root, TreeNode target, int k) {
-            map = new HashMap<>();
-            buildMap(root);
+            // 应该将树的结构转换成图去考虑
+            fatherMap = new HashMap<>();
+            buildMap(root, fatherMap);
+            // 遍历去找距离为k的节点
             List<Integer> list = new ArrayList<>();
-            Set<TreeNode> visited = new HashSet<>();
-            dfs(target, 0, k, visited, list);
+            dfs(target, k, new HashSet<TreeNode>(), list);
             return list;
         }
 
-        /**
-         * 构建每个节点和其父节点信息
-         */
-        private void buildMap(TreeNode root) {
+        private void dfs(TreeNode node, int dis, Set<TreeNode> visitedSet, List<Integer> list) {
+            if (node == null || visitedSet.contains(node)) {
+                return;
+            }
+            if (dis == 0) {
+                list.add(node.val);
+                return;
+            }
+            visitedSet.add(node);
+            dfs(node.left, dis - 1, visitedSet, list);
+            dfs(node.right, dis - 1, visitedSet, list);
+            dfs(fatherMap.get(node), dis - 1, visitedSet, list);
+        }
+
+        private void buildMap(TreeNode root, Map<TreeNode, TreeNode> fatherMap) {
             if (root == null) {
                 return;
             }
             if (root.left != null) {
-                map.put(root.left, root);
-                buildMap(root.left);
+                fatherMap.put(root.left, root);
+                buildMap(root.left, fatherMap);
             }
             if (root.right != null) {
-                map.put(root.right, root);
-                buildMap(root.right);
+                fatherMap.put(root.right, root);
+                buildMap(root.right, fatherMap);
             }
-        }
-
-        /**
-         * 深度优先遍历找距离为k的节点的值
-         */
-        private void dfs(TreeNode node, int distance, int k, Set<TreeNode> visitedSet, List<Integer> list) {
-            if (node == null || distance > k || visitedSet.contains(node)) {
-                return;
-            }
-            if (distance == k) {
-                list.add(node.val);
-            }
-            visitedSet.add(node);
-            dfs(node.left, distance + 1, k, visitedSet, list);
-            dfs(node.right, distance + 1, k, visitedSet, list);
-            dfs(map.get(node), distance + 1, k, visitedSet, list);
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)

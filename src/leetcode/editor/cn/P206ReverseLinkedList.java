@@ -14,12 +14,14 @@
 package leetcode.editor.cn;
 
 import structure.ListNode;
+import utils.ListNodeUtil;
 
 //Java：反转链表
 public class P206ReverseLinkedList {
     public static void main(String[] args) {
         Solution solution = new P206ReverseLinkedList().new Solution();
         // TO TEST
+        ListNodeUtil.printListNode(solution.reverseList(ListNodeUtil.createListNode(new int[]{1, 2, 3})));
     }
     //leetcode submit region begin(Prohibit modification and deletion)
 
@@ -38,15 +40,15 @@ public class P206ReverseLinkedList {
             return reverseList(null, head);
         }
 
-        private ListNode reverseList(ListNode pre, ListNode cur) {
-            // 只有一个节点
-            if (cur == null) {
-                return pre;
+        private ListNode reverseList(ListNode p, ListNode q) {
+            if (q == null) {
+                return p;
             }
-            ListNode nextNode = cur.next;
-            cur.next = pre;
-            return reverseList(cur, nextNode);
+            ListNode r = q.next;
+            q.next = p;
+            return reverseList(q, r);
         }
+
     }
     //leetcode submit region end(Prohibit modification and deletion)
 

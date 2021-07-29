@@ -67,25 +67,25 @@ public class P112PathSum {
      * }
      */
     class Solution {
+        // 是否已经找到的标志
         private boolean isFind = false;
 
         public boolean hasPathSum(TreeNode root, int targetSum) {
-            dfs(root, 0, targetSum);
+            dfs(root, targetSum);
             return isFind;
         }
 
-        private void dfs(TreeNode root, int curSum, int targetSum) {
+        private void dfs(TreeNode root, int sum) {
             if (root == null || isFind) {
                 return;
             }
-            curSum += root.val;
-            if (root.left == null && root.right == null && curSum == targetSum) {
+            if (root.left == null && root.right == null && sum == root.val) {
                 isFind = true;
                 return;
             }
             // 叶子节点不符合或者不是叶子节点
-            dfs(root.left, curSum, targetSum);
-            dfs(root.right, curSum, targetSum);
+            dfs(root.left, sum - root.val);
+            dfs(root.right, sum - root.val);
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)

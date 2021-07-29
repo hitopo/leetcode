@@ -46,8 +46,7 @@ public class P321CreateMaximumNumber {
     public static void main(String[] args) {
         Solution solution = new P321CreateMaximumNumber().new Solution();
         // TO TEST
-        // System.out.println(Arrays.toString(solution.maxNumber(new int[]{3, 4, 6, 5}, new int[]{9, 1, 2, 5, 8, 3}, 5)));
-        System.out.println(Arrays.toString(solution.maxSubSequence(new int[]{3, 4, 6, 5}, 2)));
+        System.out.println(Arrays.toString(solution.maxNumber(new int[]{6, 7}, new int[]{6, 0, 4}, 5)));
     }
 
     //leetcode submit region begin(Prohibit modification and deletion)
@@ -57,13 +56,48 @@ public class P321CreateMaximumNumber {
             int n = nums2.length;
             // 从两个数组中分别找到i和k-i个子序列，这个序列要是最大的，这样保证拼接在一起之后还是最大的
             int[] res = new int[k];
-            for (int i = 0; i < k; i++) {
-                if (i < m && k - i < n) {
+            for (int i = 0; i <= k; i++) {
+                if (i <= m && k - i <= n) {
+                    // i表示从第一个数组中拿出的数量
+                    // 从两个单独的数组中找出最大的递减子序列，然后比较两个子序列的大小，将大的放在前面，最后组合这两个
                     int[] arr = merge(maxSubSequence(nums1, i), maxSubSequence(nums2, k - i));
                     if (compare(arr, 0, res, 0) >= 0) {
                         res = arr;
                     }
                 }
+            }
+            return res;
+        }
+
+        /**
+         * 找到数组最大长度为k的序列（数字）
+         */
+        private int[] maxSubSequence(int[] nums, int k) {
+            if (k == 0) {
+                return new int[0];
+            }
+            if (k == nums.length) {
+                return nums;
+            }
+            // 这里用单调递减栈求组成最大数字的子序列
+            Deque<Integer> stack = new ArrayDeque<>();
+            // 出栈的次数，抛弃的数字数量
+            int popTimes = nums.length - k;
+            for (int num : nums) {
+                while (popTimes > 0 && !stack.isEmpty() && num > stack.peek()) {
+                    popTimes--;
+                    stack.pop();
+                }
+                stack.push(num);
+            }
+            while (popTimes > 0) {
+                popTimes--;
+                stack.pop();
+            }
+            // 注意最终的结果是从栈底到栈顶的数字连续
+            int[] res = new int[stack.size()];
+            for (int i = res.length - 1; i >= 0; i--) {
+                res[i] = stack.pop();
             }
             return res;
         }
@@ -110,39 +144,6 @@ public class P321CreateMaximumNumber {
                     j++;
                 }
                 k++;
-            }
-            return res;
-        }
-
-        /**
-         * 找到数组最大长度为k的序列（数字）
-         */
-        private int[] maxSubSequence(int[] nums, int k) {
-            if (k == 0) {
-                return new int[0];
-            }
-            if (k == nums.length) {
-                return nums;
-            }
-            // 这里用单调递减栈求最大子序列
-            Deque<Integer> stack = new ArrayDeque<>();
-            // 出栈的次数，抛弃的数字数量
-            int popTimes = nums.length - k;
-            for (int num : nums) {
-                while (popTimes > 0 && !stack.isEmpty() && stack.peek() < num) {
-                    popTimes--;
-                    stack.pop();
-                }
-                stack.push(num);
-            }
-            while (popTimes > 0) {
-                popTimes--;
-                stack.pop();
-            }
-            // stack中的元素转换成数组输出
-            int[] res = new int[stack.size()];
-            for (int i = res.length - 1; i >= 0; i--) {
-                res[i] = stack.pop();
             }
             return res;
         }
