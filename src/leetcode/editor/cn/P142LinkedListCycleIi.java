@@ -85,12 +85,12 @@ public class P142LinkedListCycleIi {
                 return null;
             }
             // 快慢指针
-            ListNode fast = head;
             ListNode slow = head;
+            ListNode fast = head.next;
             boolean hasCycle = false;
-            while (fast.next != null && fast.next.next != null) {
-                fast = fast.next.next;
+            while (fast != null && fast.next != null) {
                 slow = slow.next;
+                fast = fast.next.next;
                 if (fast == slow) {
                     hasCycle = true;
                     break;

@@ -69,13 +69,16 @@
 
 package leetcode.editor.cn;
 
-import structure.MoutainArray;
+import structure.MountainArray;
+import structure.MountainArrayImpl;
 
 //Java：山脉数组中查找目标值
 public class P1095FindInMountainArray {
     public static void main(String[] args) {
         Solution solution = new P1095FindInMountainArray().new Solution();
         // TO TEST
+        MountainArray mountainArray = new MountainArrayImpl(new int[]{1, 2, 3, 4, 5, 3, 1});
+        System.out.println(solution.findInMountainArray(3, mountainArray));
     }
     //leetcode submit region begin(Prohibit modification and deletion)
 
@@ -89,15 +92,62 @@ public class P1095FindInMountainArray {
      */
 
     class Solution {
-        public int findInMountainArray(int target, MoutainArray mountainArr) {
+        public int findInMountainArray(int target, MountainArray mountainArr) {
             // 先找到峰值，再去左右区间分别查找
+            int len = mountainArr.length();
+            int peek = findPeek(mountainArr, len);
+            // 左半边查找
+            int leftIdx = upBinarySearch(mountainArr, 0, peek, target);
+            if (leftIdx >= 0) {
+                return leftIdx;
+            }
+            // 右半边查找
+            int rightIdx = downBinarySearch(mountainArr, peek + 1, len - 1, target);
+            return rightIdx;
+        }
+
+        private int downBinarySearch(MountainArray mountainArr, int left, int right, int target) {
+            while (left <= right) {
+                int mid = left + (right - left) / 2;
+                int midVal = mountainArr.get(mid);
+                if (target == midVal) {
+                    return mid;
+                } else if (target < midVal) {
+                    left = mid + 1;
+                } else {
+                    right = mid - 1;
+                }
+            }
+            return -1;
+        }
+
+        private int upBinarySearch(MountainArray mountainArr, int left, int right, int target) {
+            while (left <= right) {
+                int mid = left + (right - left) / 2;
+                int midVal = mountainArr.get(mid);
+                if (target == midVal) {
+                    return mid;
+                } else if (target < midVal) {
+                    right = mid - 1;
+                } else {
+                    left = mid + 1;
+                }
+            }
+            return -1;
+        }
+
+        private int findPeek(MountainArray mountainArr, int len) {
             int l = 0;
-            int r = mountainArr.length();
+            int r = len - 1;
             while (l < r) {
                 int mid = l + (r - l) / 2;
-
+                if (mountainArr.get(mid) < mountainArr.get(mid + 1)) {
+                    l = mid + 1;
+                } else {
+                    r = mid;
+                }
             }
-            return 0;
+            return l;
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)

@@ -54,30 +54,29 @@ public class P209MinimumSizeSubarraySum {
     public static void main(String[] args) {
         Solution solution = new P209MinimumSizeSubarraySum().new Solution();
         // TO TEST
-        System.out.println(solution.minSubArrayLen(7, new int[] {2, 3, 1, 2, 4, 3}));
+        System.out.println(solution.minSubArrayLen(7, new int[]{2, 3, 1, 2, 4, 3}));
     }
 
     // leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
         public int minSubArrayLen(int target, int[] nums) {
+            int n = nums.length;
             int l = 0;
             int r = 0;
+            int min = Integer.MAX_VALUE;
             int sum = 0;
-            int minLen = Integer.MAX_VALUE;
-            while (r < nums.length) {
+            while (r < n) {
+                // 延伸右边界
                 sum += nums[r];
-                if (sum >= target) {
-                    while (sum >= target) {
-                        // 收缩左边界
-                        sum -= nums[l];
-                        l++;
-                    }
-                    // 这里实际上符合的区间应该是[l-1, r]，长度是r-l+2
-                    minLen = Math.min(minLen, r - l + 2);
+                while (sum >= target) {
+                    // 区间范围是[l, r], 这里需要特别注意，在头脑中想好边界变化的情况，再去写代码
+                    min = Math.min(min, r - l + 1);
+                    sum -= nums[l];
+                    l++;
                 }
                 r++;
             }
-            return minLen == Integer.MAX_VALUE ? 0 : minLen;
+            return min == Integer.MAX_VALUE ? 0 : min;
         }
     }
     // leetcode submit region end(Prohibit modification and deletion)
