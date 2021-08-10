@@ -56,24 +56,48 @@ public class P73SetMatrixZeroes {
         public void setZeroes(int[][] matrix) {
             int m = matrix.length;
             int n = matrix[0].length;
+            boolean row0 = false;
+            boolean col0 = false;
+            // 利用行首和列首记录情况
             for (int i = 0; i < m; i++) {
                 for (int j = 0; j < n; j++) {
                     if (matrix[i][j] == 0) {
-                        // 行列都转换成一个不太可能的数字
-                        for (int k = 0; k < n; k++) {
-                            matrix[i][k] = Integer.MAX_VALUE;
+                        if (i == 0) {
+                            row0 = true;
                         }
-                        for (int k = 0; k < m; k++) {
-                            matrix[k][j] = Integer.MAX_VALUE;
+                        if (j == 0) {
+                            col0 = true;
                         }
+                        matrix[i][0] = 0;
+                        matrix[0][j] = 0;
                     }
                 }
             }
-            for (int i = 0; i < m; i++) {
-                for (int j = 0; j < n; j++) {
-                    if (matrix[i][j] == Integer.MAX_VALUE) {
+            // 检查行
+            for (int i = 1; i < m; i++) {
+                if (matrix[i][0] == 0) {
+                    for (int j = 1; j < n; j++) {
                         matrix[i][j] = 0;
                     }
+                }
+            }
+            // 检查列
+            for (int i = 1; i < n; i++) {
+                if (matrix[0][i] == 0) {
+                    for (int j = 1; j < m; j++) {
+                        matrix[j][i] = 0;
+                    }
+                }
+            }
+            // 第一行、第一列
+            if (row0) {
+                for (int i = 0; i < n; i++) {
+                    matrix[0][i] = 0;
+                }
+            }
+            if (col0) {
+                for (int i = 0; i < m; i++) {
+                    matrix[i][0] = 0;
                 }
             }
         }

@@ -47,8 +47,8 @@
 
 package leetcode.editor.cn;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 // Java：无重复字符的最长子串
 public class P3LongestSubstringWithoutRepeatingCharacters {
@@ -56,29 +56,31 @@ public class P3LongestSubstringWithoutRepeatingCharacters {
         Solution solution = new P3LongestSubstringWithoutRepeatingCharacters().new Solution();
         // TO TEST
         System.out.println(solution.lengthOfLongestSubstring("pwwkew"));
+        System.out.println(solution.lengthOfLongestSubstring("abcabcbb"));
+        System.out.println(solution.lengthOfLongestSubstring("bbbbb"));
     }
 
     // leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
         public int lengthOfLongestSubstring(String s) {
-            int n = s.length();
+            // 典型的滑动窗口问题，可以用set记录窗口内的字母组成情况
             if (s.isEmpty() || s.length() == 1) {
                 return s.length();
             }
-            char[] chars = s.toCharArray();
-            // 滑动窗口
+            int n = s.length();
+            Set<Character> set = new HashSet<>();
             int l = 0;
             int r = 0;
+            char[] chars = s.toCharArray();
             int maxLen = 0;
-            // 存放滑动窗口中的字符情况，key-字母，value- key对应的字符串最后出现的位置
-            Map<Character, Integer> map = new HashMap<>();
             while (r < n) {
-                // 如果此时右边界出现的字符在l右边出现过，那么更新左边界
-                if (map.containsKey(chars[r]) && map.get(chars[r]) >= l) {
-                    l = map.get(chars[r]) + 1;
+                // 扩展右边界
+                while (set.contains(chars[r])) {
+                    set.remove(chars[l]);
+                    l++;
                 }
+                set.add(chars[r]);
                 maxLen = Math.max(maxLen, r - l + 1);
-                map.put(chars[r], r);
                 r++;
             }
             return maxLen;
