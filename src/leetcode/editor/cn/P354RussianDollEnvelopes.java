@@ -52,7 +52,7 @@ public class P354RussianDollEnvelopes {
             int n = envelopes.length;
             int[] dp = new int[n];
             int maxLen = 0;
-            // 按照长度的升序排序，长度一样再按照宽度的升序排序
+            // 信封之间的比较也很有趣，按照长度的升序排序，长度一样再按照宽度的升序排序
             Arrays.sort(envelopes, (a, b) -> a[0] != b[0] ? a[0] - b[0] : a[1] - b[1]);
             for (int i = 0; i < n; i++) {
                 dp[i] = 1;

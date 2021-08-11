@@ -67,17 +67,14 @@ public class P146LruCache {
         // TO TEST
     }
 
-    public void put(int key, int value) {
-    }
-
     //leetcode submit region begin(Prohibit modification and deletion)
     class LRUCache {
         private Map<Integer, Integer> map;
         private int capacity;
 
-        public LRUCache(int capacity) {
-            map = new LinkedHashMap<>();
+        private LRUCache(int capacity) {
             this.capacity = capacity;
+            map = new LinkedHashMap<>();
         }
 
         public int get(int key) {
@@ -94,6 +91,7 @@ public class P146LruCache {
             if (map.containsKey(key)) {
                 map.remove(key);
             } else if (map.size() == capacity) {
+                // 删除最早的元素
                 Iterator<Map.Entry<Integer, Integer>> iterator = map.entrySet().iterator();
                 iterator.next();
                 iterator.remove();
