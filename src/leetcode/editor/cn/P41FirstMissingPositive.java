@@ -31,9 +31,6 @@
 
 package leetcode.editor.cn;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
 //Java：缺失的第一个正数
 public class P41FirstMissingPositive {
     public static void main(String[] args) {
@@ -44,14 +41,27 @@ public class P41FirstMissingPositive {
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
         public int firstMissingPositive(int[] nums) {
-            Set<Integer> set = Arrays.stream(nums).filter(x -> x > 0).boxed().collect(Collectors.toSet());
-            for (int i = 1; i <= nums.length; i++) {
-                if (!set.contains(i)) {
-                    return i;
+            // 数组是没有排序，而且存在负数
+            int n = nums.length;
+            // 排除负数的影响
+            for (int i = 0; i < n; i++) {
+                if (nums[i] <= 0) {
+                    nums[i] = Integer.MAX_VALUE;
                 }
             }
-            // 如果数组就是[1,2,3,...n]，返回n+1
-            return nums.length + 1;
+            // 将遇到的所有数字对应的位置上的元素设置为负数，表示自己出现过了
+            for (int i = 0; i < n; i++) {
+                int val = Math.abs(nums[i]);
+                if (val <= n && nums[val - 1] > 0) {
+                    nums[val - 1] *= -1;
+                }
+            }
+            for (int i = 0; i < n; i++) {
+                if (nums[i] > 0) {
+                    return i + 1;
+                }
+            }
+            return n + 1;
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)

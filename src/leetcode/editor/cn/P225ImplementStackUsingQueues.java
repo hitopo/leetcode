@@ -58,34 +58,45 @@
 
 package leetcode.editor.cn;
 
-import java.util.Deque;
 import java.util.LinkedList;
+import java.util.Queue;
 
 //Java：用队列实现栈
 public class P225ImplementStackUsingQueues {
     public static void main(String[] args) {
         // TO TEST
+        new P225ImplementStackUsingQueues().test();
+    }
+
+    public void test() {
+        MyStack s = new MyStack();
+        s.push(2);
+        s.push(2);
+        System.out.println(s.top());
+        System.out.println(s.pop());
+        System.out.println(s.pop());
+        System.out.println(s.empty());
     }
 
     //leetcode submit region begin(Prohibit modification and deletion)
     class MyStack {
 
-        private Deque<Integer> dataQueue;
-        private Deque<Integer> outQueue;
+        private Queue<Integer> dataQueue;
+        private Queue<Integer> helpQueue;
 
         /**
          * Initialize your data structure here.
          */
         public MyStack() {
             dataQueue = new LinkedList<>();
-            outQueue = new LinkedList<>();
+            helpQueue = new LinkedList<>();
         }
 
         /**
          * Push element x onto stack.
          */
         public void push(int x) {
-            dataQueue.add(x);
+            dataQueue.offer(x);
         }
 
         /**
@@ -94,13 +105,13 @@ public class P225ImplementStackUsingQueues {
         public int pop() {
             int size = dataQueue.size();
             for (int i = 0; i < size - 1; i++) {
-                outQueue.add(dataQueue.poll());
+                helpQueue.offer(dataQueue.poll());
             }
-            int res = dataQueue.poll();
-            while (!outQueue.isEmpty()) {
-                dataQueue.add(outQueue.poll());
+            int value = dataQueue.poll();
+            while (!helpQueue.isEmpty()) {
+                dataQueue.offer(helpQueue.poll());
             }
-            return res;
+            return value;
         }
 
         /**
@@ -109,14 +120,14 @@ public class P225ImplementStackUsingQueues {
         public int top() {
             int size = dataQueue.size();
             for (int i = 0; i < size - 1; i++) {
-                outQueue.add(dataQueue.poll());
+                helpQueue.offer(dataQueue.poll());
             }
-            int res = dataQueue.poll();
-            while (!outQueue.isEmpty()) {
-                dataQueue.add(outQueue.poll());
+            int value = dataQueue.poll();
+            while (!helpQueue.isEmpty()) {
+                dataQueue.offer(helpQueue.poll());
             }
-            dataQueue.add(res);
-            return res;
+            dataQueue.offer(value);
+            return value;
         }
 
         /**

@@ -17,12 +17,14 @@
 package leetcode.editor.cn;
 
 import structure.ListNode;
+import utils.ListNodeUtil;
 
 //Java：删除排序链表中的重复元素
 public class P83RemoveDuplicatesFromSortedList {
     public static void main(String[] args) {
         Solution solution = new P83RemoveDuplicatesFromSortedList().new Solution();
         // TO TEST
+        ListNodeUtil.printListNode(solution.deleteDuplicates(ListNodeUtil.createListNode(new int[]{1})));
     }
     //leetcode submit region begin(Prohibit modification and deletion)
 
@@ -38,15 +40,21 @@ public class P83RemoveDuplicatesFromSortedList {
      */
     class Solution {
         public ListNode deleteDuplicates(ListNode head) {
-            // 递归才是重点，注意感受递归的思想
+            // 迭代
             if (head == null || head.next == null) {
                 return head;
             }
-            head.next = deleteDuplicates(head.next);
-            if (head.val == head.next.val) {
-                head.next = head.next.next;
+            ListNode p = head;
+            while (p.next != null) {
+                if (p.val == p.next.val) {
+                    // 如果删除了节点就不应该移动指针
+                    p.next = p.next.next;
+                } else {
+                    p = p.next;
+                }
             }
             return head;
+
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)

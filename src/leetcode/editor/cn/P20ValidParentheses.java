@@ -57,8 +57,8 @@
 
 package leetcode.editor.cn;
 
-import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.LinkedList;
 
 //Java：有效的括号
 public class P20ValidParentheses {
@@ -70,30 +70,24 @@ public class P20ValidParentheses {
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
         public boolean isValid(String s) {
-            // 左括号入栈，右括号检查
-            Deque<Character> stack = new ArrayDeque<>();
+            Deque<Character> stack = new LinkedList<>();
             char[] chars = s.toCharArray();
-            for (char aChar : chars) {
-                if (aChar == ')') {
-                    if (stack.isEmpty() || stack.peekFirst() != '(') {
+            for (int i = 0; i < chars.length; i++) {
+                char ch = chars[i];
+                if (ch == '(' || ch == '[' || ch == '{') {
+                    stack.push(ch);
+                } else if (ch == ')' || ch == ']' || ch == '}') {
+                    if (stack.isEmpty() || !quoteIsMatch(stack.peek(), ch)) {
                         return false;
                     }
                     stack.pop();
-                } else if (aChar == ']') {
-                    if (stack.isEmpty() || stack.peekFirst() != '[') {
-                        return false;
-                    }
-                    stack.pop();
-                } else if (aChar == '}') {
-                    if (stack.isEmpty() || stack.peekFirst() != '{') {
-                        return false;
-                    }
-                    stack.pop();
-                } else {
-                    stack.push(aChar);
                 }
             }
             return stack.isEmpty();
+        }
+
+        private boolean quoteIsMatch(Character c1, char c2) {
+            return (c1 == '(' && c2 == ')') || (c1 == '[' && c2 == ']') ||(c1 == '{' && c2 == '}');
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)

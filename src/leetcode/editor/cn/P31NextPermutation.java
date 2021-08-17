@@ -62,13 +62,12 @@ public class P31NextPermutation {
     // leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
         public void nextPermutation(int[] nums) {
-            // 这里的方法只能记住
             int n = nums.length;
             for (int i = n - 1; i > 0; i--) {
                 if (nums[i - 1] < nums[i]) {
                     for (int j = n - 1; j > i - 1; j--) {
                         if (nums[j] > nums[i - 1]) {
-                            // 交换两个数字
+                            // 交换并排序
                             swap(nums, i - 1, j);
                             Arrays.sort(nums, i, n);
                             return;
@@ -76,8 +75,18 @@ public class P31NextPermutation {
                     }
                 }
             }
-            // 数字本身就是降序排列的，直接排序返回最小的排列即可
-            Arrays.sort(nums);
+            revere(nums);
+        }
+
+        private void revere(int[] nums) {
+            int l = 0;
+            int r = nums.length - 1;
+            while (l < r) {
+                swap(nums, l, r);
+                l++;
+                ;
+                r--;
+            }
         }
 
         private void swap(int[] nums, int i, int j) {
@@ -85,6 +94,7 @@ public class P31NextPermutation {
             nums[i] = nums[j];
             nums[j] = temp;
         }
+
     }
     // leetcode submit region end(Prohibit modification and deletion)
 

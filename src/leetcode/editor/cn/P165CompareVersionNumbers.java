@@ -77,43 +77,44 @@ public class P165CompareVersionNumbers {
     public static void main(String[] args) {
         Solution solution = new P165CompareVersionNumbers().new Solution();
         // TO TEST
-        System.out.println(solution.compareVersion("1", "1.0.1"));
+        System.out.println(solution.compareVersion("1", "1.0.0"));
     }
 
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
         public int compareVersion(String version1, String version2) {
-            String[] version1Split = version1.split("\\.");
-            String[] version2Split = version2.split("\\.");
+            String[] version1SplitStrs = version1.split("\\.");
+            String[] version2SplitStrs = version2.split("\\.");
+            int n1 = version1SplitStrs.length;
+            int n2 = version2SplitStrs.length;
             int i = 0;
-            int j = 0;
-            // 逐段比较
-            while (i < version1Split.length && j < version2Split.length) {
-                int partV1 = Integer.parseInt(version1Split[i]);
-                int partV2 = Integer.parseInt(version2Split[j]);
-                if (partV1 < partV2) {
+            while (i < n1 && i < n2) {
+                int ver1 = Integer.parseInt(version1SplitStrs[i]);
+                int ver2 = Integer.parseInt(version2SplitStrs[i]);
+                if (ver1 > ver2) {
+                    return 1;
+                } else if (ver1 < ver2) {
                     return -1;
-                } else if (partV1 > partV2) {
-                    return 1;
-                }
-                i++;
-                j++;
-            }
-            while (i < version1Split.length) {
-                if (Integer.parseInt(version1Split[i]) > 0) {
-                    return 1;
                 }
                 i++;
             }
-            while (j < version2Split.length) {
-                if (Integer.parseInt(version2Split[j]) > 0) {
-                    return -1;
+            // 有可能1和1.0.0这样的情况，检查还有的数字后面是否还有数字
+            if (i < n1) {
+                for (int j = i; j < n1; j++) {
+                    if (Integer.parseInt(version1SplitStrs[j]) != 0) {
+                        return 1;
+                    }
                 }
-                j++;
+            }
+            if (i < n2) {
+                for (int j = i; j < n2; j++) {
+                    if (Integer.parseInt(version2SplitStrs[j]) != 0) {
+                        return -1;
+                    }
+                }
             }
             return 0;
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)
-
 }

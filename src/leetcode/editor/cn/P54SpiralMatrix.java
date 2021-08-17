@@ -46,22 +46,20 @@ public class P54SpiralMatrix {
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
         public List<Integer> spiralOrder(int[][] matrix) {
-            List<Integer> list = new ArrayList<>();
-            int left = 0;
-            int col = matrix[0].length;
-            int right = col - 1;
+            int m = matrix.length;
+            int n = matrix[0].length;
             int top = 0;
-            int row = matrix.length;
-            int bottom = row - 1;
-            // 使用已经进入的数字个数判断是否应该跳出
-            while (list.size() < row * col) {
-                // 模拟行走
+            int bottom = m - 1;
+            int left = 0;
+            int right = n - 1;
+            List<Integer> list = new ArrayList<>();
+            while (!numberEnough(list, m, n)) {
                 // 上
                 for (int i = left; i <= right; i++) {
                     list.add(matrix[top][i]);
                 }
                 top++;
-                if (list.size() == row * col) {
+                if (numberEnough(list, m, n)) {
                     break;
                 }
                 // 右
@@ -69,7 +67,7 @@ public class P54SpiralMatrix {
                     list.add(matrix[i][right]);
                 }
                 right--;
-                if (list.size() == row * col) {
+                if (numberEnough(list, m, n)) {
                     break;
                 }
                 // 下
@@ -77,7 +75,7 @@ public class P54SpiralMatrix {
                     list.add(matrix[bottom][i]);
                 }
                 bottom--;
-                if (list.size() == row * col) {
+                if (numberEnough(list, m, n)) {
                     break;
                 }
                 // 左
@@ -85,11 +83,12 @@ public class P54SpiralMatrix {
                     list.add(matrix[i][left]);
                 }
                 left++;
-                if (list.size() == row * col) {
-                    break;
-                }
             }
             return list;
+        }
+
+        private boolean numberEnough(List<Integer> list, int m, int n) {
+            return list.size() == m * n;
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)

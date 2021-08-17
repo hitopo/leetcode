@@ -63,20 +63,19 @@ public class P209MinimumSizeSubarraySum {
             int n = nums.length;
             int l = 0;
             int r = 0;
-            int min = Integer.MAX_VALUE;
-            int sum = 0;
+            int windowSum = 0;
+            int minLen = Integer.MAX_VALUE;
             while (r < n) {
-                // 延伸右边界
-                sum += nums[r];
-                while (sum >= target) {
-                    // 区间范围是[l, r], 这里需要特别注意，在头脑中想好边界变化的情况，再去写代码
-                    min = Math.min(min, r - l + 1);
-                    sum -= nums[l];
+                // 扩展右边界
+                windowSum += nums[r];
+                while (windowSum >= target) {
+                    minLen = Math.min(minLen, r - l + 1);
+                    windowSum -= nums[l];
                     l++;
                 }
                 r++;
             }
-            return min == Integer.MAX_VALUE ? 0 : min;
+            return minLen == Integer.MAX_VALUE ? 0 : minLen;
         }
     }
     // leetcode submit region end(Prohibit modification and deletion)

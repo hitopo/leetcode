@@ -41,20 +41,21 @@ public class P169MajorityElement {
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
         public int majorityElement(int[] nums) {
-            int majorityNum = nums[0];
-            int count = 1;
+            // 摩尔投票法
+            int majorNum = nums[0];
+            int cnt = 1;
             for (int i = 1; i < nums.length; i++) {
-                if (nums[i] == majorityNum) {
-                    count++;
+                if (nums[i] == majorNum) {
+                    cnt++;
                 } else {
-                    if (count == 0) {
-                        majorityNum = nums[i];
-                    } else {
-                        count--;
+                    cnt--;
+                    if (cnt == 0) {
+                        majorNum = nums[i];
+                        cnt = 1;
                     }
                 }
             }
-            return majorityNum;
+            return majorNum;
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)

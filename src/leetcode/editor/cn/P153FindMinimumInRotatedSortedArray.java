@@ -46,19 +46,17 @@ public class P153FindMinimumInRotatedSortedArray {
     public static void main(String[] args) {
         Solution solution = new P153FindMinimumInRotatedSortedArray().new Solution();
         // TO TEST
-        System.out.println(solution.findMin(new int[]{2, 3, 0, 1}));
+        System.out.println(solution.findMin(new int[]{4, 5, 6, 7, 0, 1, 2}));
     }
 
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
         public int findMin(int[] nums) {
-            // 二分的方法
             int l = 0;
             int r = nums.length - 1;
             while (l < r) {
                 int mid = l + (r - l) / 2;
-                if (nums[l] < nums[mid]) {
-                    // [l, mid]升序
+                if (nums[mid] > nums[r]) {
                     l = mid + 1;
                 } else {
                     r = mid;

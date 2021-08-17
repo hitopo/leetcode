@@ -55,6 +55,7 @@ public class P42TrappingRainWater {
             int[] maxRight = new int[n];
             maxLeft[0] = 0;
             maxRight[n - 1] = 0;
+            // 直接从第二个位置开始计算
             for (int i = 1; i < height.length; i++) {
                 // 这里比较的是height[i-1]因为maxLeft[i-1]没有考虑i-1位置的墙高度
                 maxLeft[i] = Math.max(maxLeft[i - 1], height[i - 1]);
@@ -62,8 +63,10 @@ public class P42TrappingRainWater {
             for (int i = n - 2; i >= 0; i--) {
                 maxRight[i] = Math.max(maxRight[i + 1], height[i + 1]);
             }
+            // 可以积水的需要去除最边上的两列
             for (int i = 1; i < n - 1; i++) {
                 int minHeight = Math.min(maxLeft[i], maxRight[i]);
+                // 只有当前高度小于较小的那个该列才会积水
                 if (minHeight > height[i]) {
                     res += minHeight - height[i];
                 }
@@ -72,5 +75,4 @@ public class P42TrappingRainWater {
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)
-
 }

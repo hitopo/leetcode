@@ -74,27 +74,25 @@ public class P93RestoreIpAddresses {
             if (s.length() < 4 || s.length() > 12) {
                 return resList;
             }
+            // 记录暂时的结果
             List<String> list = new ArrayList<>();
             dfs(s, 0, 0, list, resList);
             return resList;
         }
 
         private void dfs(String s, int pos, int splitTimes, List<String> list, List<String> resList) {
-            int remainStrLen = s.length() - pos;
-            int remainSplitTimes = 4 - splitTimes;
-            if (remainStrLen < remainSplitTimes || remainStrLen > 3 * remainSplitTimes) {
-                // 剩下的数字不够划分或者太多了划分不过来都要提前剪枝（每一段数字数是1-3）
+            int residualNumber = s.length() - pos;
+            int residualSplitTimes = 4 - splitTimes;
+            if (residualNumber < residualSplitTimes || residualNumber > residualSplitTimes * 3) {
                 return;
             }
-            if (list.size() == 4) {
-                // 划分完成
+            if (pos == s.length() && splitTimes == 4) {
                 resList.add(String.join(".", list));
                 return;
             }
-            // 划分
             for (int i = pos; i < pos + 3 && i < s.length(); i++) {
                 String segment = s.substring(pos, i + 1);
-                if (isValidIpSegment(segment)) {
+                if (isValidSegment(segment)) {
                     list.add(segment);
                     dfs(s, i + 1, splitTimes + 1, list, resList);
                     list.remove(list.size() - 1);
@@ -102,12 +100,11 @@ public class P93RestoreIpAddresses {
             }
         }
 
-        private boolean isValidIpSegment(String segment) {
-            if (!segment.equals("0") && segment.charAt(0) == '0') {
-                return false;
+        private boolean isValidSegment(String segment) {
+            if (segment.startsWith("0")) {
+                return "0".equals(segment);
             }
-            int num = Integer.parseInt(segment);
-            return num <= 255;
+            return Integer.parseInt(segment) <= 255;
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)

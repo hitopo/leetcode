@@ -42,10 +42,7 @@
 
 package leetcode.editor.cn;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 //Java：课程表
 public class P207CourseSchedule {
@@ -57,7 +54,7 @@ public class P207CourseSchedule {
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
         public boolean canFinish(int numCourses, int[][] prerequisites) {
-            // 拓扑排序
+            // 典型的拓扑排序的问题
             int n = prerequisites.length;
             if (n == 0) {
                 // 没有约束返回true
@@ -65,39 +62,36 @@ public class P207CourseSchedule {
             }
             int[] inDegrees = new int[numCourses];
             Map<Integer, List<Integer>> graph = new HashMap<>();
-            for (int i = 0; i < numCourses; i++) {
-                graph.put(i, new ArrayList<>());
-            }
             for (int[] prerequisite : prerequisites) {
                 int course = prerequisite[0];
                 int preCourse = prerequisite[1];
                 inDegrees[course]++;
-                graph.get(preCourse).add(course);
+                graph.computeIfAbsent(preCourse, ArrayList::new).add(course);
             }
-            int[] flags = new int[numCourses];
-            for (int i = 0; i < numCourses; i++) {
-                if (dfs(graph, i, flags)) {
-                    return false;
+            // 从入度为0的节点开始删除
+            Queue<Integer> queue = new LinkedList<>();
+            for (int i = 0; i < inDegrees.length; i++) {
+                if (inDegrees[i] == 0) {
+                    queue.offer(i);
                 }
             }
-            return true;
-        }
-
-        private boolean dfs(Map<Integer, List<Integer>> graph, int course, int[] flags) {
-            if (flags[course] == 1) {
-                return true;
-            }
-            if (flags[course] == -1) {
-                return false;
-            }
-            flags[course] = 1;
-            for (Integer nextCourse : graph.get(course)) {
-                if (dfs(graph, nextCourse, flags)) {
-                    return true;
+            // 删除
+            int courseCnt = 0;
+            while (!queue.isEmpty()) {
+                int course = queue.poll();
+                courseCnt++;
+                List<Integer> nextCourses = graph.get(course);
+                if (nextCourses == null) {
+                    continue;
+                }
+                for (Integer nextCourse : nextCourses) {
+                    inDegrees[nextCourse]--;
+                    if (inDegrees[nextCourse] == 0) {
+                        queue.offer(nextCourse);
+                    }
                 }
             }
-            flags[course] = -1;
-            return false;
+            return courseCnt == numCourses;
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)

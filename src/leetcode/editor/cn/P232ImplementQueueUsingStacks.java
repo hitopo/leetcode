@@ -75,8 +75,8 @@ public class P232ImplementQueueUsingStacks {
 
     //leetcode submit region begin(Prohibit modification and deletion)
     class MyQueue {
-        Deque<Integer> inStack;
-        Deque<Integer> outStack;
+        private Deque<Integer> inStack;
+        private Deque<Integer> outStack;
 
         /**
          * Initialize your data structure here.
@@ -109,6 +109,7 @@ public class P232ImplementQueueUsingStacks {
          * Get the front element.
          */
         public int peek() {
+            // 如果出的栈是空的，那么就将in中的数据全部倒入out中
             if (outStack.isEmpty()) {
                 while (!inStack.isEmpty()) {
                     outStack.push(inStack.pop());

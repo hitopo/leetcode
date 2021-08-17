@@ -59,42 +59,53 @@ public class P4MedianOfTwoSortedArrays {
     public static void main(String[] args) {
         Solution solution = new P4MedianOfTwoSortedArrays().new Solution();
         // TO TEST
+        System.out.println(solution.findMedianSortedArrays(new int[]{1, 2}, new int[]{3, 4}));
     }
 
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
         public double findMedianSortedArrays(int[] nums1, int[] nums2) {
-            int m = nums1.length;
-            int n = nums2.length;
-            // 这里的left都是从1开始的
-            int left = (m + n + 1) / 2;
-            int right = (m + n + 2) / 2;
-            return (findKth(nums1, 0, nums2, 0, left) + findKth(nums1, 0, nums2, 0, right)) / 2.0;
+            int n = nums1.length + nums2.length;
+            if (n % 2 != 0) {
+                return findKth(nums1, nums2, n / 2);
+            } else {
+                return (findKth(nums1, nums2, n / 2 - 1) + findKth(nums1, nums2, n / 2)) / 2.0;
+            }
         }
 
         /**
-         * 找到数组nums1[i:]和nums2[j:]找到第k个数字，k从1开始
+         * 返回两个有序数组的 kth 元素，k从0开始
          */
-        private int findKth(int[] nums1, int i, int[] nums2, int j, int k) {
-            // 有一个数组已经用完了，另一个数组一定是有序的，直接返回第k个即可
-            if (i >= nums1.length) {
-                return nums2[j + k - 1];
+        private double findKth(int[] nums1, int[] nums2, int k) {
+            int i = 0;
+            int j = 0;
+            int step = 0;
+            while (i < nums1.length && j < nums2.length) {
+                if (step == k) {
+                    return Math.min(nums1[i], nums2[j]);
+                }
+                if (nums1[i] < nums2[j]) {
+                    i++;
+                } else {
+                    j++;
+                }
+                step++;
             }
-            if (j >= nums2.length) {
-                return nums1[i + k - 1];
+            while (i < nums1.length) {
+                if (step == k) {
+                    return nums1[i];
+                }
+                i++;
+                step++;
             }
-            if (k == 1) {
-                return Math.min(nums1[i], nums2[j]);
+            while (j < nums2.length) {
+                if (step == k) {
+                    return nums2[j];
+                }
+                j++;
+                step++;
             }
-            int midVal1 = i + k / 2 - 1 < nums1.length ? nums1[i + k / 2 - 1] : Integer.MAX_VALUE;
-            int midVal2 = j + k / 2 - 1 < nums2.length ? nums2[j + k / 2 - 1] : Integer.MAX_VALUE;
-            if (midVal1 < midVal2) {
-                // nums1的中间数字较小，淘汰掉[i, i + k/2 -1]共k/2个数字
-                return findKth(nums1, i + k / 2, nums2, j, k - k / 2);
-            } else {
-                // nums2的中间数字较小，淘汰掉nums2[j, j + k/2 - 1]共k/2个数字
-                return findKth(nums1, i, nums2, j + k / 2, k - k / 2);
-            }
+            return -1;
         }
 
     }

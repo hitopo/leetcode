@@ -62,6 +62,7 @@
 
 package leetcode.editor.cn;
 
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.LinkedList;
 
@@ -70,34 +71,35 @@ public class P239SlidingWindowMaximum {
     public static void main(String[] args) {
         Solution solution = new P239SlidingWindowMaximum().new Solution();
         // TO TEST
+        System.out.println(Arrays.toString(solution.maxSlidingWindow(new int[]{1, 3, -1, -3, 5, 3, 6, 7}, 3)));
     }
 
     // leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
         public int[] maxSlidingWindow(int[] nums, int k) {
-            if (nums.length == 0 || nums.length == 1) {
+            if (nums == null || nums.length < 2) {
                 return nums;
             }
-            int[] res = new int[nums.length - k + 1];
-            // 维护一个递减的双端队列，里面存的是元素下标（避免元素重复问题）
+            // 维护一个递减的双向队列
             Deque<Integer> deque = new LinkedList<>();
-            // 形成滑动窗口
+            int[] result = new int[nums.length - k + 1];
             for (int i = 0; i < nums.length; i++) {
-                // 新来的数字如果较大，从队尾删除那些比它小的元素
+                // 可以理解为新进入的数字将前面的不比它大的数"压扁"了，这里等于也要删除是因为后面的数下标更大，更不容易被"淘汰"
                 while (!deque.isEmpty() && nums[deque.peekLast()] <= nums[i]) {
                     deque.pollLast();
                 }
-                deque.offer(i);
-                // 判断滑动窗口左边是否被淘汰
-                if (deque.peek() <= i - k) {
+                deque.addLast(i);
+                // 当前最大值已经在滑动窗口之外，需要删除一个队首的元素
+                while (deque.peek() <= i - k) {
                     deque.poll();
                 }
-                // 判断滑动窗口是否已经形成，如果已经形成就可以输出结果了
+                // 当窗口已经形成之后，需要开始记录结果，而双端队列的头部就是当前窗口的最大元素下标
                 if (i + 1 >= k) {
-                    res[i + 1 - k] = nums[deque.peek()];
+                    result[i + 1 - k] = nums[deque.peek()];
                 }
             }
-            return res;
+            return result;
+
         }
     }
     // leetcode submit region end(Prohibit modification and deletion)

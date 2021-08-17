@@ -24,6 +24,9 @@
 
 package leetcode.editor.cn;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 //Java：字符串相乘
 public class P43MultiplyStrings {
     public static void main(String[] args) {
@@ -34,7 +37,32 @@ public class P43MultiplyStrings {
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
         public String multiply(String num1, String num2) {
-            return "";
+            if ("0".equals(num1) || "0".equals(num2)) {
+                return "0";
+            }
+            int n1 = num1.length();
+            int n2 = num2.length();
+            int[] res = new int[n1 + n2];
+            for (int i = n1 - 1; i >= 0; i--) {
+                int numI = num1.charAt(i) - '0';
+                for (int j = n2 - 1; j >= 0; j--) {
+                    int numJ = num2.charAt(j) - '0';
+                    int product = numI * numJ;
+                    // 两个数字相乘最多只能是两位数，放在res[i+j]和res[i+j+1]上
+                    int sum = product + res[i + j + 1];
+                    res[i + j] += sum / 10;
+                    res[i + j + 1] = sum % 10;
+                }
+            }
+            // 需要去除前导的0
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < res.length; i++) {
+                if (i == 0 && res[i] == 0) {
+                    continue;
+                }
+                sb.append(res[i]);
+            }
+            return sb.toString();
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)

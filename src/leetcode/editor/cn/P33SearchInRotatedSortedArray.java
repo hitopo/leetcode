@@ -53,30 +53,26 @@ public class P33SearchInRotatedSortedArray {
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
         public int search(int[] nums, int target) {
-            // 时间复杂度就已经限定了该题只能用二分查找，限定了不存在重复的元素
-            // 实际上不管怎么旋转，旋转之后的数组肯定存在某一半是有序的
+            // 这种旋转排序数组一般都是用二分法去找值，这样找target的，循环的条件一般是<=
             int l = 0;
             int r = nums.length - 1;
-            // 这题是查找，只剩一个位置也需要检查
             while (l <= r) {
                 int mid = l + (r - l) / 2;
                 if (target == nums[mid]) {
                     return mid;
-                }
-                if (nums[l] <= nums[mid]) {
-                    // 前半部分有序，这里必须也要和开头比较，如[4,5,6,7,0,1,2]查找0，前半部分有序，但是0并不在4,5,6,7中
-                    // 所以缩半区间的时候左右区间都要比较
+                } else if (nums[l] <= nums[mid]) {
+                    // 左半边有序，再去找target在哪个区间
                     if (target >= nums[l] && target < nums[mid]) {
                         r = mid - 1;
                     } else {
                         l = mid + 1;
                     }
-                } else if (nums[mid] < nums[r]) {
-                    // 后半部分有序
-                    if (target > nums[mid] && target <= nums[r]) {
-                        l = mid + 1;
-                    } else {
+                } else {
+                    // 右半区间有序
+                    if (target >= nums[mid] && target < nums[r]) {
                         r = mid - 1;
+                    } else {
+                        l = mid + 1;
                     }
                 }
             }
