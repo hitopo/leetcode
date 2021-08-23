@@ -58,42 +58,41 @@ public class P329LongestIncreasingPathInAMatrix {
 
         public int longestIncreasingPath(int[][] matrix) {
             // 矩阵中最长的递增路径
-            int maxIncreasePath = 0;
-            int nRows = matrix.length;
-            if (nRows == 0) {
-                return maxIncreasePath;
-            }
-            int nCols = matrix[0].length;
-            memo = new int[nRows][nCols];
-            for (int i = 0; i < nRows; i++) {
-                for (int j = 0; j < nCols; j++) {
-                    maxIncreasePath = Math.max(maxIncreasePath, dfs(matrix, nRows, nCols, i, j));
+            // dfs + memo
+            int m = matrix.length;
+            int n = matrix[0].length;
+            memo = new int[m][n];
+            int maxIncreasePath = 1;
+            for (int i = 0; i < m; i++) {
+                for (int j = 0; j < n; j++) {
+                    // 注意递归开始应该从每一个位置都要计算，并不是从第一个位置开始就行了的
+                    // 因为只从一个点开始只能够延伸到自己上升的边界，如果没有上升的邻居了，就不在计算了，那么还有很多位置没算递增
+                    maxIncreasePath = Math.max(maxIncreasePath, dfs(matrix, m, n, i, j));
                 }
             }
             return maxIncreasePath;
         }
 
-        private int dfs(int[][] matrix, int nRows, int nCols, int x, int y) {
+        private int dfs(int[][] matrix, int m, int n, int x, int y) {
             if (memo[x][y] != 0) {
                 return memo[x][y];
             }
-            int res = 0;
+            int increasePath = 1;
+            int maxIncreasePosLen = 0;
             for (int i = 0; i < 4; i++) {
                 int newX = x + dx[i];
                 int newY = y + dy[i];
-                if (locationInBound(newX, newY, nRows, nCols) && matrix[newX][newY] > matrix[x][y]) {
-                    // 找出四个方向中之后递增长度最大的那个
-                    res = Math.max(res, dfs(matrix, nRows, nCols, newX, newY));
+                if (locInMatrix(m, n, newX, newY) && matrix[newX][newY] > matrix[x][y]) {
+                    maxIncreasePosLen = Math.max(maxIncreasePosLen, dfs(matrix, m, n, newX, newY));
                 }
             }
-            // 自己肯定算一个位置
-            res++;
-            memo[x][y] = res;
-            return res;
+            increasePath += maxIncreasePosLen;
+            memo[x][y] = increasePath;
+            return increasePath;
         }
 
-        private boolean locationInBound(int x, int y, int nRows, int nCols) {
-            return x >= 0 && x < nRows && y >= 0 && y < nCols;
+        private boolean locInMatrix(int m, int n, int x, int y) {
+            return x >= 0 && x < m && y >= 0 && y < n;
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)

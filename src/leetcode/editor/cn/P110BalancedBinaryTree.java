@@ -71,27 +71,19 @@ public class P110BalancedBinaryTree {
     class Solution {
         public boolean isBalanced(TreeNode root) {
             // 递归遍历的同时记录是否是平衡二叉树
-            return height(root) >= 0;
+            return dfs(root) >= 0;
         }
 
-        /**
-         * 返回树的高度，如果树的节点存在不平衡节点，就返回-1
-         */
-        private int height(TreeNode root) {
+        private int dfs(TreeNode root) {
             if (root == null) {
                 return 0;
             }
-            int leftHeight = height(root.left);
-            int rightHeight = height(root.right);
-            // 左右子树中存在不平衡节点，那么向上返回不平衡即可
-            if (leftHeight == -1 || rightHeight == -1) {
+            int l = dfs(root.left);
+            int r = dfs(root.right);
+            if (l == -1 || r == -1) {
                 return -1;
             }
-            if (Math.abs(leftHeight - rightHeight) > 1) {
-                return -1;
-            }
-            // 返回高度
-            return 1 + Math.max(leftHeight, rightHeight);
+            return Math.abs(l - r) <= 1 ? Math.max(l, r) + 1 : -1;
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)

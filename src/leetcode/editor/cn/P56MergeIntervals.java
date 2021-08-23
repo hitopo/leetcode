@@ -49,22 +49,19 @@ public class P56MergeIntervals {
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
         public int[][] merge(int[][] intervals) {
+            // 这题看上去简单，实际上处理起来挺麻烦的
             List<int[]> list = new ArrayList<>();
-            // 按照起点排序，之后一个个生成结果
             Arrays.sort(intervals, Comparator.comparingInt(o -> o[0]));
-            int start = intervals[0][0];
-            int end = intervals[0][1];
-            for (int i = 1; i < intervals.length; i++) {
-                if (intervals[i][0] > end) {
-                    list.add(new int[]{start, end});
-                    start = intervals[i][0];
-                    end = intervals[i][1];
+            int[] lastInterval = null;
+            for (int[] interval : intervals) {
+                if (lastInterval == null || lastInterval[1] < interval[0]) {
+                    // lastInterval[1] < interval[0]表示需要新添加上一个interval
+                    list.add(interval);
+                    lastInterval = interval;
                 } else {
-                    end = Math.max(end, intervals[i][1]);
+                    lastInterval[1] = Math.max(lastInterval[1], interval[1]);
                 }
             }
-            list.add(new int[]{start, end});
-            // list<int[]>转换成int[][]
             return list.toArray(new int[0][]);
         }
     }

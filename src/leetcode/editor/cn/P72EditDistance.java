@@ -53,31 +53,29 @@ public class P72EditDistance {
     public static void main(String[] args) {
         Solution solution = new P72EditDistance().new Solution();
         // TO TEST
-        System.out.println(solution.minDistance("intention", "execution"));
+        System.out.println(solution.minDistance("horse", "ros"));
     }
 
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
         public int minDistance(String word1, String word2) {
-            // 两个的字符串的编辑距离
+            // 编辑距离肯定是动态规划
             int n1 = word1.length();
             int n2 = word2.length();
-            // dp[i][j]表示s1[0:i)转换成s2[0:j)的最小次数
             int[][] dp = new int[n1 + 1][n2 + 1];
-            // 初始化
-            for (int i = 1; i <= n1; i++) {
-                dp[i][0] = i;
-            }
-            for (int i = 1; i <= n2; i++) {
+            for (int i = 0; i <= n2; i++) {
                 dp[0][i] = i;
             }
-            // 状态转移方程
+            for (int i = 0; i <= n1; i++) {
+                dp[i][0] = i;
+            }
             for (int i = 1; i <= n1; i++) {
                 for (int j = 1; j <= n2; j++) {
                     if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
+                        // 对应位置的字符相等就不需要转换了，直接省了一步
                         dp[i][j] = dp[i - 1][j - 1];
                     } else {
-                        dp[i][j] = Math.min(dp[i - 1][j], Math.min(dp[i][j - 1], dp[i - 1][j - 1])) + 1;
+                        dp[i][j] = Math.min(dp[i - 1][j - 1], Math.min(dp[i][j - 1], dp[i - 1][j])) + 1;
                     }
                 }
             }

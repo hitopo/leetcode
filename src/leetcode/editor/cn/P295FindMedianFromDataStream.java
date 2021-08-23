@@ -52,20 +52,18 @@ public class P295FindMedianFromDataStream {
          * initialize your data structure here.
          */
         public MedianFinder() {
-            // 左半边是大顶堆，右半边是小顶堆
+            // 左半边是大顶堆，右半边是小顶堆，PriorityQueue默认是小顶堆
             leftMaxHeap = new PriorityQueue<>(Collections.reverseOrder());
             rightMinHeap = new PriorityQueue<>();
         }
 
         public void addNum(int num) {
-            // 注意两个半边长度之差不能超过1，右边较多
-            // 数据先添加进左边，然后左边挤出一个最大的到右边
-            // 如果右边长度较大，右边挤出一个最小的到左边
-            // 注意保证左边长度始终大于等于右边，最多大1
+            // 这里添加的num需要左右两个堆都要去更新一下
             leftMaxHeap.add(num);
-            rightMinHeap.add(leftMaxHeap.remove());
+            rightMinHeap.add(leftMaxHeap.poll());
+            // 此时左边的净变化是0，右边是+1，所以右边可能会越来越多，所以需要判断右边是否需要拿元素到左边
             if (rightMinHeap.size() > leftMaxHeap.size()) {
-                leftMaxHeap.add(rightMinHeap.remove());
+                leftMaxHeap.add(rightMinHeap.poll());
             }
         }
 

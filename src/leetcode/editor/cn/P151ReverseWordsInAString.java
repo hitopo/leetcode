@@ -74,79 +74,74 @@ public class P151ReverseWordsInAString {
     public static void main(String[] args) {
         Solution solution = new P151ReverseWordsInAString().new Solution();
         // TO TEST
-        System.out.println(solution.reverseWords("the sky is blue"));
+        System.out.println(solution.reverseWords("EPY2giL"));
     }
 
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
         public String reverseWords(String s) {
-            if (s == null) {
-                return null;
+            // 这题需要O(1)的空间复杂度，还需要去除单词之间的空格，还是很有难度的
+            if (s == null || s.isEmpty()) {
+                return s;
             }
+            // 全部翻转
             char[] chars = s.toCharArray();
             int n = chars.length;
-            // 翻转整个数组
             reverse(chars, 0, n - 1);
+            // 翻转单词
             reverseSingleWord(chars);
-            //实际上还会有空格的问题，翻转之后不能有多余的空格，所以要删除多余的空格
-            return cleanSpace(chars);
-        }
-
-        private String cleanSpace(char[] chars) {
-            int i = 0;
-            int j = 0;
-            int n = chars.length;
-            while (j < n) {
-                // 跳过开头的空格
-                while (j < n && chars[j] == ' ') {
-                    j++;
-                }
-                while (j < n && chars[j] != ' ') {
-                    chars[i] = chars[j];
-                    i++;
-                    j++;
-                }
-                // 跳过末尾的空格
-                while (j < n && chars[j] == ' ') {
-                    j++;
-                }
-                // 每个单词后面要加空格
-                if (j < n) {
-                    chars[i++] = ' ';
-                }
-            }
-            return new String(chars).substring(0, i);
+            //  去除多余的空格
+            return clearSpace(chars);
         }
 
         private void reverseSingleWord(char[] chars) {
-            int i = 0;
-            int j = 0;
-            int n = chars.length;
-            while (j < n) {
-                // 找到单词的首字母
-                while (i < n && chars[i] == ' ') {
-                    i++;
+            // 需要找到单词的边界，有点像计算器那题中找数字
+            for (int i = 0; i < chars.length; i++) {
+                if (chars[i] != ' ') {
+                    int j = i;
+                    while (i + 1 < chars.length && chars[i + 1] != ' ') {
+                        i++;
+                    }
+                    reverse(chars, j, i);
                 }
-                j = i;
-                // 找到字母之后的空格
-                while (j < n && chars[j] != ' ') {
-                    j++;
-                }
-                // 翻转该单词
-                reverse(chars, i, j - 1);
-                i = j;
             }
         }
 
-        private void reverse(char[] chars, int st, int ed) {
-            int i = st;
-            int j = ed;
-            while (i < j) {
-                char temp = chars[i];
-                chars[i] = chars[j];
-                chars[j] = temp;
-                i++;
-                j--;
+        private String clearSpace(char[] chars) {
+            int i = 0;
+            int j = 0;
+            while (j < chars.length) {
+                // 跳过前面的空格
+                while (j < chars.length && chars[j] == ' ') {
+                    j++;
+                }
+                // 移动字母到最前面
+                while (j < chars.length && chars[j] != ' ') {
+                    chars[i] = chars[j];
+                    j++;
+                    i++;
+                }
+                // 跳过中间的空格
+                while (j < chars.length && chars[j] == ' ') {
+                    j++;
+                }
+                // 还没到尾，说明后面还会有单词
+                if (j < chars.length) {
+                    chars[i] = ' ';
+                    i++;
+                }
+            }
+            // 截取就是删除末尾的空格
+            return new String(chars, 0, i);
+        }
+
+        private void reverse(char[] chars, int l, int r) {
+            while (l < r) {
+                char temp = chars[l];
+                chars[l] = chars[r];
+                chars[r] = temp;
+                l++;
+                r--;
             }
         }
     }
