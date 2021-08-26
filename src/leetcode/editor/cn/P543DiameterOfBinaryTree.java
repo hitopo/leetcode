@@ -60,12 +60,10 @@ public class P543DiameterOfBinaryTree {
             if (root == null) {
                 return 0;
             }
-            int leftMax = calcMax(root.left);
-            int rightMax = calcMax(root.right);
-            // 最大值统计的是每个root作为根节点左右子树的高度和
-            max = Math.max(max, leftMax + rightMax);
-            // 递归向上返回的应该是root根节点的子树的高度
-            return Math.max(leftMax, rightMax) + 1;
+            int l = calcMax(root.left);
+            int r = calcMax(root.right);
+            max = Math.max(max, l + r);
+            return Math.max(l, r) + 1;
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)

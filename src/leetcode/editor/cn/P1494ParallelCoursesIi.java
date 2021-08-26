@@ -70,16 +70,17 @@ public class P1494ParallelCoursesIi {
                 relation[1]--;
                 pre[relation[1]] |= (1 << relation[0]);
             }
+            // 所有的课程都学了是1111...
             int all = 1 << n;
             // dp表示学习了课程的状态是i的情况下所需要的最少的学期
             int[] dp = new int[all];
-            for (int i = 0; i < all; i++) {
-                // 学完所有的最多需要n个学期，因为共有n门课
+            dp[0] = 0;
+            for (int i = 1; i < all; i++) {
+                // 学完所有的最多需要n个学期，因为共有n门课，所有的位置全部初始化为最大值
                 dp[i] = n;
             }
-            dp[0] = 0;
             for (int state = 0; state < all; state++) {
-                // 当前选课状态下接下去能够选择的所有课程
+                // 穷举所有的状态
                 int next = 0;
                 for (int i = 0; i < n; i++) {
                     // (state & pre[i]) == pre[i]表示的是当前state下所有i的先导课已经上完
@@ -93,7 +94,7 @@ public class P1494ParallelCoursesIi {
                 // 枚举所有的子集，列出实际上可以学习的课程的所有选择情况
                 for (int sub = next; sub > 0; sub = (sub - 1) & next) {
                     if (Integer.bitCount(sub) <= k) {
-                        // 在学习的情况中找一个最小的，dp[state]+1表示需要1个学期学习课程
+                        // 在学习的情况中找一个最小的，dp[state]+1表示需要1个学期转换到state|sub对应的状态
                         dp[state | sub] = Math.min(dp[state | sub], dp[state] + 1);
                     }
                 }

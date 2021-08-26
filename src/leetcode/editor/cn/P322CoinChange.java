@@ -67,15 +67,15 @@ public class P322CoinChange {
         public int coinChange(int[] coins, int amount) {
             // 零钱兑换
             int[] dp = new int[amount + 1];
-            for (int i = 1; i <= amount; i++) {
+            for (int money = 1; money <= amount; money++) {
                 // 硬币个数初始化成无限个，表示兑换不了
                 int cnt = Integer.MAX_VALUE;
                 for (int coin : coins) {
-                    if (i - coin >= 0 && dp[i - coin] != Integer.MAX_VALUE) {
-                        cnt = Math.min(cnt, dp[i - coin] + 1);
+                    if (money - coin >= 0 && dp[money - coin] != Integer.MAX_VALUE) {
+                        cnt = Math.min(cnt, dp[money - coin] + 1);
                     }
                 }
-                dp[i] = cnt;
+                dp[money] = cnt;
             }
             return dp[amount] == Integer.MAX_VALUE ? -1 : dp[amount];
         }
