@@ -40,22 +40,29 @@ public class P84LargestRectangleInHistogram {
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
         public int largestRectangleArea(int[] heights) {
-            int maxArea = 0;
+            // 暴力
             int n = heights.length;
-            // 维护一个单调递增的栈
-            Deque<Integer> stack = new LinkedList<>();
-            for (int i = 0; i < n; i++) {
-                while (!stack.isEmpty() && heights[i] < heights[stack.peek()]) {
-                    int idx = stack.pop();
-                    int width = stack.isEmpty() ? i : i - stack.peek() - 1;
-                    maxArea = Math.max(maxArea, width * heights[idx]);
-                }
-                stack.push(i);
+            if (n == 0) {
+                return 0;
             }
-            while (!stack.isEmpty()) {
-                int idx = stack.pop();
-                int width = stack.isEmpty() ? n : n - stack.peek() - 1;
-                maxArea = Math.max(maxArea, width * heights[idx]);
+            int maxArea = 0;
+            // 维护递增栈
+            Deque<Integer> upStack = new LinkedList<>();
+            for (int i = 0; i < n; i++) {
+                while (!upStack.isEmpty() && heights[i] < heights[upStack.peek()]) {
+                    // 计算之前的面积
+                    int height = heights[upStack.pop()];
+                    // 千万要注意，这里的宽度并不是只有右边的部分，可能还会向左边延伸
+                    // 如果左边还有元素，由于是上升的，不能向左边延伸，如果没有，说明可以一直延伸
+                    int width = upStack.isEmpty() ? i : i - upStack.peek() - 1;
+                    maxArea = Math.max(maxArea, height * width);
+                }
+                upStack.push(i);
+            }
+            while (!upStack.isEmpty()) {
+                int height = heights[upStack.pop()];
+                int width = upStack.isEmpty() ? heights.length : heights.length - upStack.peek() - 1;
+                maxArea = Math.max(maxArea, height * width);
             }
             return maxArea;
         }

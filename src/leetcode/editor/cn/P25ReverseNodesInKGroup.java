@@ -80,27 +80,7 @@ public class P25ReverseNodesInKGroup {
      */
     class Solution {
         public ListNode reverseKGroup(ListNode head, int k) {
-            // 这个和全部翻转链表有相似之处
-            ListNode p = head;
-            // 看当前是否有k的长度，如果不够，直接返回head就行
-            for (int i = 0; i < k; i++) {
-                if (p == null) {
-                    return head;
-                }
-                p = p.next;
-            }
-            // 翻转
-            ListNode dummyNode = new ListNode(-1);
-            p = head;
-            for (int i = 0; i < k; i++) {
-                ListNode nextNode = dummyNode.next;
-                ListNode pNext = p.next;
-                dummyNode.next = p;
-                p.next = nextNode;
-                p = pNext;
-            }
-            head.next = reverseKGroup(p, k);
-            return dummyNode.next;
+            return null;
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)

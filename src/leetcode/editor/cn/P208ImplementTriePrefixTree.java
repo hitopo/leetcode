@@ -55,12 +55,12 @@ public class P208ImplementTriePrefixTree {
 
     //leetcode submit region begin(Prohibit modification and deletion)
     class TrieNode {
-        public boolean isLeaf;
-        public TrieNode[] children;
+        public boolean isWord;
+        public TrieNode[] next;
 
         public TrieNode() {
-            isLeaf = false;
-            children = new TrieNode[26];
+            isWord = false;
+            next = new TrieNode[26];
         }
     }
 
@@ -78,46 +78,46 @@ public class P208ImplementTriePrefixTree {
          * Inserts a word into the trie.
          */
         public void insert(String word) {
-            TrieNode p = root;
+            TrieNode cur = root;
             char[] chars = word.toCharArray();
             for (char ch : chars) {
-                int nextCharIdx = ch - 'a';
-                if (p.children[nextCharIdx] == null) {
-                    p.children[nextCharIdx] = new TrieNode();
+                int nextIdx = ch - 'a';
+                if (cur.next[nextIdx] == null) {
+                    cur.next[nextIdx] = new TrieNode();
                 }
-                p = p.children[nextCharIdx];
+                cur = cur.next[nextIdx];
             }
-            p.isLeaf = true;
+            cur.isWord = true;
         }
 
         /**
          * Returns if the word is in the trie.
          */
         public boolean search(String word) {
-            TrieNode p = root;
+            TrieNode cur = root;
             char[] chars = word.toCharArray();
             for (char ch : chars) {
-                int nextCharIdx = ch - 'a';
-                if (p.children[nextCharIdx] == null) {
+                int nextIdx = ch - 'a';
+                if (cur.next[nextIdx] == null) {
                     return false;
                 }
-                p = p.children[nextCharIdx];
+                cur = cur.next[nextIdx];
             }
-            return p.isLeaf;
+            return cur.isWord;
         }
 
         /**
          * Returns if there is any word in the trie that starts with the given prefix.
          */
         public boolean startsWith(String prefix) {
-            TrieNode p = root;
+            TrieNode cur = root;
             char[] chars = prefix.toCharArray();
             for (char ch : chars) {
-                int nextCharIdx = ch - 'a';
-                if (p.children[nextCharIdx] == null) {
+                int nextIdx = ch - 'a';
+                if (cur.next[nextIdx] == null) {
                     return false;
                 }
-                p = p.children[nextCharIdx];
+                cur = cur.next[nextIdx];
             }
             return true;
         }

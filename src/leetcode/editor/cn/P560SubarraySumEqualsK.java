@@ -19,8 +19,8 @@
 
 package leetcode.editor.cn;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 //Java：和为K的子数组
 public class P560SubarraySumEqualsK {
@@ -33,26 +33,20 @@ public class P560SubarraySumEqualsK {
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
         public int subarraySum(int[] nums, int k) {
-            // 区间和的方法计算
-            int n = nums.length;
-            int[] sum = new int[n + 1];
-            sum[0] = 0;
-            int tempSum = 0;
-            for (int i = 0; i < n; i++) {
-                tempSum += nums[i];
-                sum[i + 1] = tempSum;
-            }
+            // 记录某个子数组和出现的次数
+            Map<Integer, Integer> map = new HashMap<>();
+            // sum[0] = 0，所以0一定会出现
+            map.put(0, 1);
+            int sum = 0;
             int cnt = 0;
-            // 在sum找出某两个的差是k，这里的方法是借鉴的两数之和
-            Set<Integer> set = new HashSet<>();
-            for (int i = 0; i <= n; i++) {
-                int target = sum[i] - k;
-                if (set.contains(target)) {
-                    cnt++;
-                } else {
-                    set.add(sum[i]);
+            for (int num : nums) {
+                sum += num;
+                if (map.containsKey(sum - k)) {
+                    cnt += map.get(sum - k);
                 }
+                map.put(sum, map.getOrDefault(sum, 0) + 1);
             }
+
             return cnt;
         }
     }

@@ -57,8 +57,9 @@
 
 package leetcode.editor.cn;
 
-import java.util.Iterator;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 //Java：LRU 缓存机制
@@ -69,34 +70,37 @@ public class P146LruCache {
 
     //leetcode submit region begin(Prohibit modification and deletion)
     class LRUCache {
-        private Map<Integer, Integer> map;
+        private Map<Integer, Integer> valueMap;
+        private List<Integer> visitList;
         private int capacity;
 
-        private LRUCache(int capacity) {
+        public LRUCache(int capacity) {
+            valueMap = new HashMap<>(capacity);
+            visitList = new LinkedList<>();
             this.capacity = capacity;
-            map = new LinkedHashMap<>();
         }
 
         public int get(int key) {
-            if (!map.containsKey(key)) {
-                return -1;
+            if (valueMap.containsKey(key)) {
+                visitList.remove(key);
+                visitList.add(key);
+                return valueMap.get(key);
             }
-            int value = map.get(key);
-            map.remove(key);
-            map.put(key, value);
-            return value;
+            return -1;
         }
 
         public void put(int key, int value) {
-            if (map.containsKey(key)) {
-                map.remove(key);
-            } else if (map.size() == capacity) {
-                // 删除最早的元素
-                Iterator<Map.Entry<Integer, Integer>> iterator = map.entrySet().iterator();
-                iterator.next();
-                iterator.remove();
+            if (valueMap.containsKey(key)) {
+                visitList.remove(key);
+            } else {
+                if (visitList.size() == this.capacity) {
+                    // 删除头部的key
+                    int removeKey = visitList.remove(0);
+                    valueMap.remove(removeKey);
+                }
             }
-            map.put(key, value);
+            visitList.add(key);
+            valueMap.put(key, value);
         }
     }
 

@@ -66,27 +66,28 @@ public class P236LowestCommonAncestorOfABinaryTree {
      */
     class Solution {
         public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-            // 递归终止的条件，有两个，一个是null，还有一个是当前节点就是p或者q
             if (root == null) {
                 return null;
             }
             if (root == p || root == q) {
                 return root;
             }
-            // 函数的返回值是p、q的最近公共祖先或者是p和q本身
-            TreeNode left = lowestCommonAncestor(root.left, p, q);
-            TreeNode right = lowestCommonAncestor(root.right, p, q);
-            if (left != null && right != null) {
-                // p、q分布在root的左右两侧
+            TreeNode l = lowestCommonAncestor(root.left, p, q);
+            TreeNode r = lowestCommonAncestor(root.right, p, q);
+            // l和r同时不是空表示p和q恰好在root的不同侧，因为是倒序遍历，所以第一次遇到的一定就是结果，返回root
+            if (l != null && r != null) {
                 return root;
             }
-            // 只有一个不是null说明不是null的那个就是结果
-            if (left != null) {
-                return left;
+            // 当有一空一非空的时候，存在两种情况，假设左边非空，右边空：
+            // p、q都在l这一侧 -> 返回l
+            // p和q一个在l这一侧，那么此时l会指向p（假设p在这一侧）
+            if (l != null) {
+                return l;
             }
-            if (right != null) {
-                return right;
+            if (r != null) {
+                return r;
             }
+            // 两边同时为空说明两边都不包含p和q，所以子树中也不可能包含，返回null
             return null;
         }
     }

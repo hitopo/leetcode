@@ -51,6 +51,7 @@ public class P547NumberOfProvinces {
     public static void main(String[] args) {
         Solution solution = new P547NumberOfProvinces().new Solution();
         // TO TEST
+        System.out.println(solution.findCircleNum(new int[][]{{1, 1, 0}, {1, 1, 0}, {0, 1, 1}}));
     }
 
     //leetcode submit region begin(Prohibit modification and deletion)
@@ -58,35 +59,31 @@ public class P547NumberOfProvinces {
         private int[] parent;
 
         public UnionFind(int n) {
-            this.parent = new int[n];
+            parent = new int[n];
             for (int i = 0; i < n; i++) {
                 parent[i] = i;
             }
         }
 
-        /**
-         * 找节点p的root节点
-         */
-        public int find(int p) {
-            if (p != parent[p]) {
-                parent[p] = find(parent[p]);
+        public int root(int p) {
+            if (parent[p] != p) {
+                parent[p] = root(parent[p]);
             }
             return parent[p];
         }
 
-        /**
-         * 将p和q加到一个圈子中
-         */
         public void union(int p, int q) {
-            int pRoot = find(p);
-            int qRoot = find(q);
-            parent[pRoot] = qRoot;
+            int rootP = root(p);
+            int rootQ = root(q);
+            if (rootP != rootQ) {
+                parent[rootP] = rootQ;
+            }
         }
 
-        public int countSetNum() {
+        public int getSetNum() {
             int num = 0;
             for (int i = 0; i < parent.length; i++) {
-                if (parent[i] == i) {
+                if (i == parent[i]) {
                     num++;
                 }
             }
@@ -96,17 +93,16 @@ public class P547NumberOfProvinces {
 
     class Solution {
         public int findCircleNum(int[][] isConnected) {
-            int m = isConnected.length;
-            int n = isConnected[0].length;
-            UnionFind uf = new UnionFind(m);
-            for (int i = 0; i < m; i++) {
+            int n = isConnected.length;
+            UnionFind uf = new UnionFind(n);
+            for (int i = 0; i < n; i++) {
                 for (int j = i + 1; j < n; j++) {
                     if (isConnected[i][j] == 1) {
                         uf.union(i, j);
                     }
                 }
             }
-            return uf.countSetNum();
+            return uf.getSetNum();
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)
