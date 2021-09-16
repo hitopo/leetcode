@@ -96,18 +96,15 @@ public class P94BinaryTreeInorderTraversal {
                 return list;
             }
             TreeNode cur = root;
-            // cur表示当前遍历的节点，stack存放等待访问的节点
+            // 这个条件报名没有左子树的节点等待遍历了，cur==null同时也遍历完成了
             while (!stack.isEmpty() || cur != null) {
-                // 从根节点开始一直往左走
+                // 添加左子树到stack中等待遍历
                 while (cur != null) {
                     stack.push(cur);
                     cur = cur.left;
                 }
-                // 跳出while说明cur==null，所有左子树都添加到栈中了
-                // 访问第一个节点
                 cur = stack.pop();
                 list.add(cur.val);
-                // 访问右子树中的节点
                 cur = cur.right;
             }
             return list;

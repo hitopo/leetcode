@@ -40,21 +40,17 @@ public class P83RemoveDuplicatesFromSortedList {
      */
     class Solution {
         public ListNode deleteDuplicates(ListNode head) {
-            // 迭代
+            // 递归删除
             if (head == null || head.next == null) {
                 return head;
             }
-            ListNode p = head;
-            while (p.next != null) {
-                if (p.val == p.next.val) {
-                    // 如果删除了节点就不应该移动指针
-                    p.next = p.next.next;
-                } else {
-                    p = p.next;
-                }
+            if (head.val == head.next.val) {
+                // 相当于跳过head
+                head = deleteDuplicates(head.next);
+            } else {
+                head.next = deleteDuplicates(head.next);
             }
             return head;
-
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)

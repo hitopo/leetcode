@@ -80,7 +80,9 @@ public class P124BinaryTreeMaximumPathSum {
             }
             int leftMax = maxPath(root.left);
             int rightMax = maxPath(root.right);
+            // 最大的和是连接当期那节点和左右节点所有的最大和
             maxSum = Math.max(maxSum, leftMax + rightMax + root.val);
+            // 返回上面的是连接当前节点和左右节点的一支的结果
             return Math.max(0, root.val + Math.max(leftMax, rightMax));
         }
     }

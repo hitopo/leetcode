@@ -76,10 +76,12 @@ public class P450DeleteNodeInABst {
             if (root == null) {
                 return null;
             }
+            // 从左边删除
             if (key < root.val) {
                 root.left = deleteNode(root.left, key);
                 return root;
             }
+            // 从右边删除
             if (key > root.val) {
                 root.right = deleteNode(root.right, key);
                 return root;
@@ -91,10 +93,11 @@ public class P450DeleteNodeInABst {
             if (root.right == null) {
                 return root.left;
             }
-            // 左右子树都存在，找到右子树的最小值，替换掉当前节点
+            // 左右子树都存在，找到右子树的最小值，替换掉当前节点（数值替换）
             TreeNode rightMinNode = getMin(root.right);
             root.val = rightMinNode.val;
-            // 删掉最小的那个节点
+            // 删掉最小的那个节点，同样是借助递归的方法
+            // 或者在找最小值的过程中就删除，但是要记录pre，有点麻烦
             root.right = deleteNode(root.right, rightMinNode.val);
             return root;
         }

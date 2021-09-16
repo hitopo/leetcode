@@ -39,39 +39,33 @@ public class P42TrappingRainWater {
     public static void main(String[] args) {
         Solution solution = new P42TrappingRainWater().new Solution();
         // TO TEST
-        System.out.println(solution.trap(new int[]{0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1}));
+        System.out.println(solution.trap(new int[]{5, 2, 2, 5}));
     }
 
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
         public int trap(int[] height) {
             int n = height.length;
-            if (n <= 2) {
+            if (n < 2) {
                 return 0;
             }
-            int res = 0;
-            // 借用动态规划的思想直接用空间换取时间事先存好每个位置上的左右两边最高的墙的高度
             int[] maxLeft = new int[n];
-            int[] maxRight = new int[n];
-            maxLeft[0] = 0;
-            maxRight[n - 1] = 0;
-            // 直接从第二个位置开始计算
-            for (int i = 1; i < height.length; i++) {
-                // 这里比较的是height[i-1]因为maxLeft[i-1]没有考虑i-1位置的墙高度
+            for (int i = 1; i < n; i++) {
                 maxLeft[i] = Math.max(maxLeft[i - 1], height[i - 1]);
             }
+            int[] maxRight = new int[n];
             for (int i = n - 2; i >= 0; i--) {
                 maxRight[i] = Math.max(maxRight[i + 1], height[i + 1]);
             }
-            // 可以积水的需要去除最边上的两列
-            for (int i = 1; i < n - 1; i++) {
+            // 直接计算每个位置上的积攒的水
+            int ans = 0;
+            for (int i = 0; i < n; i++) {
                 int minHeight = Math.min(maxLeft[i], maxRight[i]);
-                // 只有当前高度小于较小的那个该列才会积水
                 if (minHeight > height[i]) {
-                    res += minHeight - height[i];
+                    ans += minHeight - height[i];
                 }
             }
-            return res;
+            return ans;
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)

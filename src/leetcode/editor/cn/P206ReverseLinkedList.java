@@ -37,18 +37,17 @@ public class P206ReverseLinkedList {
      */
     class Solution {
         public ListNode reverseList(ListNode head) {
-            return reverseList(null, head);
+            return reverse(null, head);
         }
 
-        private ListNode reverseList(ListNode p, ListNode q) {
-            if (q == null) {
-                return p;
+        private ListNode reverse(ListNode pre, ListNode cur) {
+            if (cur == null) {
+                return pre;
             }
-            ListNode r = q.next;
-            q.next = p;
-            return reverseList(q, r);
+            ListNode curNext = cur.next;
+            cur.next = pre;
+            return reverse(cur, curNext);
         }
-
     }
     //leetcode submit region end(Prohibit modification and deletion)
 

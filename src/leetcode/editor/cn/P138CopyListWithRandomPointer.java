@@ -95,7 +95,7 @@ public class P138CopyListWithRandomPointer {
             if (head == null) {
                 return null;
             }
-            // 先复制节点
+            // 先复制节点，就在当前节点的后面复制一个一模一样的节点，这样是为了设置random方便
             Node p = head;
             while (p != null) {
                 Node newNode = new Node(p.val);
@@ -118,8 +118,8 @@ public class P138CopyListWithRandomPointer {
             Node cur = dummyNode;
             while (p != null) {
                 cur.next = p.next;
+                p.next = p.next.next;
                 cur = cur.next;
-                p.next = cur.next;
                 p = p.next;
             }
             return dummyNode.next;

@@ -36,9 +36,6 @@ package leetcode.editor.cn;
 import structure.ListNode;
 import utils.ListNodeUtil;
 
-import java.util.HashMap;
-import java.util.Map;
-
 //Java：删除排序链表中的重复元素 II
 public class P82RemoveDuplicatesFromSortedListIi {
     public static void main(String[] args) {
@@ -60,25 +57,21 @@ public class P82RemoveDuplicatesFromSortedListIi {
      */
     class Solution {
         public ListNode deleteDuplicates(ListNode head) {
-            // 最简单的方法是先遍历一遍判断哪些出现了两次
-            Map<Integer, Integer> map = new HashMap<>();
-            ListNode p = head;
-            while (p != null) {
-                map.put(p.val, map.getOrDefault(p.val, 0) + 1);
-                p = p.next;
+            if (head == null || head.next == null) {
+                return head;
             }
-            ListNode dummyNode = new ListNode(-1);
-            dummyNode.next = head;
-            p = dummyNode;
-            while (p.next != null) {
-                if (map.get(p.next.val) > 1) {
-                    p.next = p.next.next;
-                } else {
-                    p = p.next;
+            // 递归删除
+            ListNode next = head.next;
+            if (head.val == next.val) {
+                // 跳过相等的
+                while (next != null && head.val == next.val) {
+                    next = next.next;
                 }
+                head = deleteDuplicates(next);
+            } else {
+                head.next = deleteDuplicates(next);
             }
-            // 第一个节点也可能需要删除
-            return dummyNode.next;
+            return head;
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)

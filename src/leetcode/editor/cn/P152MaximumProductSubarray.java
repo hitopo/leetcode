@@ -42,7 +42,7 @@ public class P152MaximumProductSubarray {
             int max = Integer.MIN_VALUE;
             for (int i = 1; i <= nums.length; i++) {
                 if (nums[i - 1] < 0) {
-                    // 如果当前的值是小于0的，那么直接交换
+                    // 如果当前的值是小于0的，那么交换当前的最大值和最小值
                     int temp = dpMax[i - 1];
                     dpMax[i - 1] = dpMin[i - 1];
                     dpMin[i - 1] = temp;
@@ -51,7 +51,7 @@ public class P152MaximumProductSubarray {
                 // 从当前位置重新开始序列的值和延续之前的序列并选择当前序列的值
                 dpMax[i] = Math.max(nums[i - 1], dpMax[i - 1] * nums[i - 1]);
                 dpMin[i] = Math.min(nums[i - 1], dpMin[i - 1] * nums[i - 1]);
-                //最后找出iMax数组中的最大值即可
+                //最后找出dpMax数组中的最大值即可
                 max = Math.max(max, dpMax[i]);
             }
             return max;

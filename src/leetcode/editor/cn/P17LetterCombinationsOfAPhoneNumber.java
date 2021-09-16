@@ -74,17 +74,26 @@ public class P17LetterCombinationsOfAPhoneNumber {
             return resList;
         }
 
-        private void combineHelper(String digits, int idx, StringBuilder tempRes, Map<Character, String> map, List<String> resList) {
-            if (idx == digits.length()) {
-                resList.add(tempRes.toString());
+        /**
+         * 回溯的主要方法
+         * @param digits  数字
+         * @param pos     当前处理的是哪一个数字
+         * @param sb      暂存的结果
+         * @param map     数字和字母的对应关系
+         * @param resList 结果
+         */
+        private void combineHelper(String digits, int pos, StringBuilder sb, Map<Character, String> map, List<String> resList) {
+            // 数字都处理完了，输出结果
+            if (pos == digits.length()) {
+                resList.add(sb.toString());
                 return;
             }
-            char ch = digits.charAt(idx);
-            String letters = map.get(ch);
-            for (int i = 0; i < letters.length(); i++) {
-                tempRes.append(letters.charAt(i));
-                combineHelper(digits, idx + 1, tempRes, map, resList);
-                tempRes.deleteCharAt(tempRes.length() - 1);
+            String possibleChars = map.get(digits.charAt(pos));
+            for (int i = 0; i < possibleChars.length(); i++) {
+                char ch = possibleChars.charAt(i);
+                sb.append(ch);
+                combineHelper(digits, pos + 1, sb, map, resList);
+                sb.deleteCharAt(sb.length() - 1);
             }
         }
     }

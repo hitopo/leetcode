@@ -20,6 +20,10 @@
 
 package leetcode.editor.cn;
 
+import com.sun.jnlp.JNLPRandomAccessFileNSBImpl;
+
+import java.util.Random;
+
 //Java：数组中的第K个最大元素
 public class P215KthLargestElementInAnArray {
     public static void main(String[] args) {
@@ -33,23 +37,31 @@ public class P215KthLargestElementInAnArray {
         public int findKthLargest(int[] nums, int k) {
             // 快速选择算法
             int n = nums.length;
-            int target = n - k;
             int l = 0;
             int r = n - 1;
+            int target = n - k;
             while (true) {
-                int idx = partition(nums, l, r);
-                if (idx < target) {
-                    l = idx + 1;
-                } else if (idx > target) {
-                    r = idx - 1;
+                int correctIdx = partition(nums, l, r);
+                if (correctIdx == target) {
+                    return nums[target];
+                } else if (correctIdx < target) {
+                    l = correctIdx + 1;
                 } else {
-                    return nums[idx];
+                    r = correctIdx - 1;
                 }
             }
         }
 
-        private int partition(int[] nums, int l, int r) {
-            int pivot = nums[l];
+        private int partition(int[] nums, int left, int right) {
+            // 随机选取轴
+            if (left < right) {
+                Random random = new Random();
+                int randomIdx = left + random.nextInt(right - left + 1);
+                swap(nums, left, randomIdx);
+            }
+            int pivot = nums[left];
+            int l = left;
+            int r = right;
             while (l < r) {
                 while (l < r && nums[r] >= pivot) {
                     r--;
@@ -68,6 +80,12 @@ public class P215KthLargestElementInAnArray {
             }
             nums[l] = pivot;
             return l;
+        }
+
+        private void swap(int[] nums, int i, int j) {
+            int temp = nums[i];
+            nums[i] = nums[j];
+            nums[j] = temp;
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)
